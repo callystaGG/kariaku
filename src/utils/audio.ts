@@ -1138,6 +1138,80 @@ class SoundEngine {
     };
   }
 
+  private stopHooks: Array<() => void> = [];
+
+  /** Registers a callback run whenever speech is stopped or replaced. Returns an unsubscribe function. */
+  public registerStopHook(hook: () => void): () => void {
+    this.stopHooks.push(hook);
+    return () => {
+      this.stopHooks = this.stopHooks.filter(h => h !== hook);
+    };
+  }
+
+  private runStopHooks() {
+    for (const hook of this.stopHooks) {
+      try {
+        hook();
+      } catch {
+        // one failing hook must not block the others
+      }
+    }
+  }
+
+  /** Lets non-synthesis audio (recorded clips) drive the same speaking indicator. */
+  public reportExternalSpeech(speaking: boolean, text: string = '') {
+    this.notifySpeechState(speaking, text);
+  }
+
+  /** Plays the short jingle that belongs to a character. */
+  public playCharacterJingle(effect: 'lion' | 'bunny' | 'owl' | 'panda' | 'dino' | 'kids') {
+    if (!this.soundEnabled) return;
+    switch (effect) {
+      case 'lion': this.playLionRoarJingle(); break;
+      case 'bunny': this.playBunnyBoingJingle(); break;
+      case 'owl': this.playOwlHootJingle(); break;
+      case 'panda': this.playPandaGiggleJingle(); break;
+      case 'dino': this.playDinoStompJingle(); break;
+      case 'kids': this.playKidsJingle(); break;
+    }
+  }
+
+  /** Browser Indonesian speech with an explicit pitch and rate (cadangan suara karakter). */
+  public speakWithProfile(rawText: string, profile: { pitch: number; rate: number }) {
+    if (!this.speechEnabled || typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      return;
+    }
+    try {
+      window.speechSynthesis.cancel();
+      this.runStopHooks();
+      this.notifySpeechState(false, '');
+
+      const cleanText = formatKidPersonaText(rawText);
+      if (!cleanText) return;
+
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'id-ID';
+      utterance.pitch = profile.pitch;
+      utterance.rate = profile.rate;
+      utterance.volume = 1.0;
+
+      if (!this.isVoicesInitialized) {
+        this.initVoices();
+      }
+      const chosen = this.femaleVoice || this.defaultVoice;
+      if (chosen) utterance.voice = chosen;
+
+      utterance.onstart = () => this.notifySpeechState(true, rawText);
+      utterance.onend = () => this.notifySpeechState(false, '');
+      utterance.onerror = () => this.notifySpeechState(false, '');
+
+      this.activeSpeechUtterance = utterance;
+      window.speechSynthesis.speak(utterance);
+    } catch {
+      // speech synthesis errors are handled safely
+    }
+  }
+
   private notifySpeechState(speaking: boolean, text: string = '') {
     this.isCurrentlySpeaking = speaking;
     this.speechListeners.forEach(l => {
@@ -1159,6 +1233,7 @@ class SoundEngine {
 
     try {
       window.speechSynthesis.cancel();
+      this.runStopHooks();
       this.notifySpeechState(false, '');
 
       const cleanKey = characterId.replace('char-', '').toLowerCase() as CharacterId;
@@ -1250,6 +1325,7 @@ class SoundEngine {
 
     try {
       window.speechSynthesis.cancel();
+      this.runStopHooks();
       this.notifySpeechState(false, '');
 
       const cleanText = formatKidPersonaText(rawText);
@@ -1301,6 +1377,7 @@ class SoundEngine {
 
     try {
       window.speechSynthesis.cancel();
+      this.runStopHooks();
       this.notifySpeechState(false, '');
 
       // Clean emojis and punctuation
@@ -1398,6 +1475,7 @@ class SoundEngine {
       window.speechSynthesis.cancel();
       this.notifySpeechState(false, '');
     }
+    this.runStopHooks();
   }
 
   public getActiveVoiceName(): string {
