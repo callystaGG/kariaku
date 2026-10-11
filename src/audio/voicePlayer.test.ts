@@ -49,13 +49,13 @@ describe('playLine', () => {
     expect(deps.speakFallback).toHaveBeenCalledTimes(1);
     const [text, profile] = (deps.speakFallback as ReturnType<typeof vi.fn>).mock.calls[0];
     expect(FALLBACK_LINES.salah).toContain(text);
-    expect(profile).toEqual({ pitch: 1.28, rate: 1.02 });
+    expect(profile).toEqual({ pitch: 1.28, rate: 1.02, gender: 'male' });
   });
 
   it('uses fallbackText when given', async () => {
     const { player, deps } = setup({ manifest: {} });
     await player.playLine(leo, 'sapa', 'Halo dari teks khusus');
-    expect(deps.speakFallback).toHaveBeenCalledWith('Halo dari teks khusus', { pitch: 1.28, rate: 1.02 });
+    expect(deps.speakFallback).toHaveBeenCalledWith('Halo dari teks khusus', { pitch: 1.28, rate: 1.02, gender: 'male' });
   });
 
   it('a rejecting playUrl (NotAllowedError) falls back to speech and does not throw', async () => {
@@ -89,7 +89,7 @@ describe('playLine', () => {
   it('kids always resolves to a real voice and never throws on an empty manifest', async () => {
     const { player, deps } = setup({ manifest: {}, random: () => 1 });
     await expect(player.playLine(getCharacterById('kids'), 'sapa')).resolves.toBe('fallback');
-    expect((deps.speakFallback as ReturnType<typeof vi.fn>).mock.calls[0][1]).toEqual({ pitch: 1.4, rate: 1.04 });
+    expect((deps.speakFallback as ReturnType<typeof vi.fn>).mock.calls[0][1]).toEqual({ pitch: 1.4, rate: 1.04, gender: 'female' });
   });
 });
 

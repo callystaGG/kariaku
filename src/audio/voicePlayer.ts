@@ -6,7 +6,7 @@ export interface VoicePlayerDeps {
   manifest: Manifest;
   playUrl(url: string): Promise<void>;
   stopUrl(): void;
-  speakFallback(text: string, profile: { pitch: number; rate: number }): void;
+  speakFallback(text: string, profile: { pitch: number; rate: number; gender?: 'male' | 'female' }): void;
   stopFallback(): void;
   speechEnabled(): boolean;
   random(): number;

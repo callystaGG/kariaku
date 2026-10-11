@@ -8,7 +8,7 @@ export interface CharacterVoice {
   id: VoiceId;
   label: string;
   /** Browser speech settings used only when no recorded clip is available. */
-  fallback: { pitch: number; rate: number };
+  fallback: { pitch: number; rate: number; gender: 'male' | 'female' };
 }
 
 export interface Character extends AvatarItem {
@@ -43,7 +43,7 @@ export const CHARACTERS: Character[] = [
     personality: 'Pemberani, optimis, dan selalu riang gembira.',
     greeting: 'Rawrrr! Keren sekali! Halo kawan-kawan! Aku Leo si Singa Juara. Belajar berhitung dan matematika itu seru dan mudah sekali kalau kita belajar bersama. Yuk, kita mulai petualangan berhitung sekarang!',
     soundEffect: 'lion',
-    voices: [{ id: 'leo', label: 'Leo', fallback: { pitch: 1.28, rate: 1.02 } }],
+    voices: [{ id: 'leo', label: 'Leo', fallback: { pitch: 1.28, rate: 1.02, gender: 'male' } }],
     badge: '👑 Raja Berhitung',
     voiceStyle: 'Suara Ceria & Bersemangat (Pemberani & Optimis)',
     soundEffectName: 'Auman Singa Lucu 🎺',
@@ -65,7 +65,7 @@ export const CHARACTERS: Character[] = [
     personality: 'Ceria, lincah, ekspresif, dan ramah.',
     greeting: 'Boing boing! Hihihi! Halo teman-temanku yang hebat! Aku Ciko si Kelinci Ceria. Membaca buku dongeng dan cerita bergambar itu asyik sekali lho! Tiba-tiba kita bisa bertualang ke negeri ajaib! Ayo, kita buka buku ceritanya dan belajar bersama!',
     soundEffect: 'bunny',
-    voices: [{ id: 'ciko', label: 'Ciko', fallback: { pitch: 1.38, rate: 1.04 } }],
+    voices: [{ id: 'ciko', label: 'Ciko', fallback: { pitch: 1.38, rate: 1.04, gender: 'female' } }],
     badge: '🥕 Bintang Literasi',
     voiceStyle: 'Suara Lincah & Menggemaskan (Ceria & Riang)',
     soundEffectName: 'Lompatan Kelinci 🌀',
@@ -87,7 +87,7 @@ export const CHARACTERS: Character[] = [
     personality: 'Cerdas, bijak, suka bereksperimen, dan penuh rasa ingin tahu.',
     greeting: 'Hmm... Kacamata sainsku sudah terpasang rapi! Hoo-hooo! Tahukah kamu kenapa pelangi punya warna-warni yang indah? Rahasia alam semesta itu ajaib dan luar biasa lho! Yuk, kita selidiki rahasia sains bersama!',
     soundEffect: 'owl',
-    voices: [{ id: 'owi', label: 'Owi', fallback: { pitch: 1.22, rate: 0.98 } }],
+    voices: [{ id: 'owi', label: 'Owi', fallback: { pitch: 1.22, rate: 0.98, gender: 'male' } }],
     badge: '🔭 Peneliti Cilik',
     voiceStyle: 'Suara Cerdas & Penuh Rasa Ingin Tahu (Ajaib Sekali!)',
     soundEffectName: 'Seruling Burung Hantu 🦉',
@@ -109,7 +109,7 @@ export const CHARACTERS: Character[] = [
     personality: 'Penyayang, santun, hangat, dan murah senyum.',
     greeting: 'Hihihi! Halo teman-temanku tersayang! Mimi punya pelangi kebaikan hari ini. Kalau kita saling membantu, berbagi, dan menyayangi sesama teman, hati kita jadi damai dan bahagia lho. Tetap tersenyum dan semangat ya!',
     soundEffect: 'panda',
-    voices: [{ id: 'mimi', label: 'Mimi', fallback: { pitch: 1.4, rate: 1.02 } }],
+    voices: [{ id: 'mimi', label: 'Mimi', fallback: { pitch: 1.4, rate: 1.02, gender: 'female' } }],
     badge: '🌸 Sahabat Hangat',
     voiceStyle: 'Suara Lembut & Riang (Ramah & Hangat)',
     soundEffectName: 'Lonceng Gemerincing 🔔',
@@ -131,7 +131,7 @@ export const CHARACTERS: Character[] = [
     personality: 'Penuh petualangan, berimajinasi tinggi, dan tangkas.',
     greeting: 'Wuuush! Duum duum! Rawrrr cilik! Siap menjelajahi bintang-bintang di luar angkasa bersamaku? Alam semesta ini luar biasa luas dan menakjubkan lho! Ayo pegangan yang erat, kita meluncur bersama!',
     soundEffect: 'dino',
-    voices: [{ id: 'dino', label: 'Dino', fallback: { pitch: 1.26, rate: 1.02 } }],
+    voices: [{ id: 'dino', label: 'Dino', fallback: { pitch: 1.26, rate: 1.02, gender: 'male' } }],
     badge: '🚀 Penjelajah Bintang',
     voiceStyle: 'Suara Penjelajah Cilik (Wuuush! Bersemangat)',
     soundEffectName: 'Hentakan Dinosaurus 🐾',
@@ -154,8 +154,8 @@ export const CHARACTERS: Character[] = [
     greeting: 'Horeee! Halo sahabat hebat! Kami Budi dan Callysta! Belajar di Karia Ku sangat menyenangkan dan membuat kita makin pintar, kan? Yuk, kita selesaikan kuis bersama dan kumpulkan semua bintang juaramu!',
     soundEffect: 'kids',
     voices: [
-      { id: 'budi', label: 'Budi', fallback: { pitch: 1.26, rate: 1.04 } },
-      { id: 'callysta', label: 'Callysta', fallback: { pitch: 1.4, rate: 1.04 } }
+      { id: 'budi', label: 'Budi', fallback: { pitch: 1.26, rate: 1.04, gender: 'male' } },
+      { id: 'callysta', label: 'Callysta', fallback: { pitch: 1.4, rate: 1.04, gender: 'female' } }
     ],
     badge: '🌟 Bintang Prestasi',
     voiceStyle: 'Suara Dua Sahabat Kompak (Horeee! Semangat Bareng)',

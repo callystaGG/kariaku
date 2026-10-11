@@ -11,6 +11,8 @@
  * - Never sounds like reading — always talks like a lively best friend!
  */
 
+import { chooseVoice } from './chooseVoice';
+
 /**
  * Transforms any input text into clear, fluent, natural, and expressive Indonesian
  * suitable for text-to-speech engines without garbled pronunciations or misreading
@@ -1111,7 +1113,7 @@ class SoundEngine {
   }
 
   /** Browser Indonesian speech with an explicit pitch and rate (cadangan suara karakter). */
-  public speakWithProfile(rawText: string, profile: { pitch: number; rate: number }) {
+  public speakWithProfile(rawText: string, profile: { pitch: number; rate: number; gender?: 'male' | 'female' }) {
     if (!this.speechEnabled || typeof window === 'undefined' || !('speechSynthesis' in window)) {
       return;
     }
@@ -1132,7 +1134,10 @@ class SoundEngine {
       if (!this.isVoicesInitialized) {
         this.initVoices();
       }
-      const chosen = this.femaleVoice || this.defaultVoice;
+      const chosen = chooseVoice(
+        { male: this.maleVoice, female: this.femaleVoice, fallback: this.defaultVoice },
+        profile.gender
+      );
       if (chosen) utterance.voice = chosen;
 
       utterance.onstart = () => this.notifySpeechState(true, rawText);

@@ -30,6 +30,14 @@ describe('character roster', () => {
     }
   });
 
+  it('every voice declares the browser voice gender it falls back to', () => {
+    const gender = Object.fromEntries(CHARACTERS.flatMap(c => c.voices.map(v => [v.id, v.fallback.gender])));
+    expect(gender).toEqual({
+      leo: 'male', owi: 'male', dino: 'male', budi: 'male',
+      ciko: 'female', mimi: 'female', callysta: 'female'
+    });
+  });
+
   it('getCharacterById returns leo for an unknown id', () => {
     expect(getCharacterById('rusa').id).toBe('leo');
     expect(getCharacterById('mimi').id).toBe('mimi');
