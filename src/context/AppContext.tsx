@@ -13,6 +13,7 @@ import { sound } from '../utils/audio';
 import { getQuestionsForQuiz } from '../utils/dynamicCurriculumEngine';
 import { DEFAULT_SUBSCRIPTION_PLANS } from '../data/subscriptionPlans';
 import { INITIAL_USER_LIST, INITIAL_TRANSACTIONS, formatRupiah } from '../data/adminSeedData';
+import { migrateParentAvatars } from '../utils/avatarMigration';
 
 const STORAGE_KEY = 'kariaku_app_state_v1';
 const USERS_STORAGE_KEY = 'kariaku_users_list_v1';
@@ -61,7 +62,7 @@ export const DEFAULT_NEW_PARENT: ParentUser = {
       grade: 'sd-1',
       gradeLabel: 'SD Kelas 1',
       age: 7,
-      avatarId: 'singa',
+      avatarId: 'leo',
       totalStars: 0,
       streakDays: 0,
       badgesEarned: [],
@@ -183,7 +184,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (Array.isArray(parsed) && parsed.length > 0) {
           const existingEmails = new Set(parsed.map((u: ParentUser) => u.email?.toLowerCase()));
           const missingSeed = INITIAL_USER_LIST.filter(u => !existingEmails.has(u.email?.toLowerCase()));
-          return [...parsed, ...missingSeed];
+          return [...parsed, ...missingSeed].map(migrateParentAvatars);
         }
       }
     } catch {
@@ -199,7 +200,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed && typeof parsed === 'object' && parsed.id && parsed.id !== 'parent-guest') {
-          return parsed;
+          return migrateParentAvatars(parsed);
         }
       }
     } catch {
@@ -371,7 +372,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     grade: 'sd-1' as GradeId,
     gradeLabel: 'SD Kelas 1',
     age: 7,
-    avatarId: 'kancil',
+    avatarId: 'leo',
     totalStars: 10,
     streakDays: 1,
     badgesEarned: ['badge_bintang_hitung'],
@@ -574,7 +575,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             grade: 'sd-1',
             gradeLabel: 'SD Kelas 1',
             age: 7,
-            avatarId: 'singa',
+            avatarId: 'leo',
             totalStars: isSarah ? 48 : 10,
             streakDays: isSarah ? 4 : 1,
             badgesEarned: isSarah ? ['badge_bintang_hitung', 'badge_hebat_baca', 'badge_skor_sempurna'] : ['badge_bintang_hitung'],
@@ -625,7 +626,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           grade: 'sd-1',
           gradeLabel: 'SD Kelas 1',
           age: 7,
-          avatarId: 'kancil',
+          avatarId: 'leo',
           totalStars: 10,
           streakDays: 1,
           badgesEarned: [],
@@ -873,7 +874,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           grade: 'sd-1',
           gradeLabel: 'SD Kelas 1',
           age: 7,
-          avatarId: 'singa',
+          avatarId: 'leo',
           totalStars: 20,
           streakDays: 1,
           badgesEarned: ['badge_bintang_hitung'],

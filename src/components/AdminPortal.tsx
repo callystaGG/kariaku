@@ -131,7 +131,7 @@ export const AdminPortal: React.FC = () => {
     name: '',
     grade: 'sd-1',
     age: 7,
-    avatarId: 'singa'
+    avatarId: 'leo'
   });
 
   // Plan Management Modals & Form
@@ -331,7 +331,7 @@ export const AdminPortal: React.FC = () => {
       name: '',
       grade: 'sd-1',
       age: 7,
-      avatarId: 'singa'
+      avatarId: 'leo'
     });
     setIsManageKidsModalOpen(true);
   };
@@ -347,7 +347,7 @@ export const AdminPortal: React.FC = () => {
       name: '',
       grade: 'sd-1',
       age: 7,
-      avatarId: 'singa'
+      avatarId: 'leo'
     });
     // refresh selectedUserDetail
     const updated = usersList.find(u => u.id === selectedUserDetail.id);

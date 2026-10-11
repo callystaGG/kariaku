@@ -20,7 +20,7 @@ export const AddChildModal: React.FC = () => {
   const [name, setName] = useState('');
   const [grade, setGrade] = useState<GradeId>('sd-1');
   const [age, setAge] = useState<number>(7);
-  const [selectedAvatarId, setSelectedAvatarId] = useState<string>('kancil');
+  const [selectedAvatarId, setSelectedAvatarId] = useState<string>('leo');
   const [error, setError] = useState('');
 
   if (!isAddChildModalOpen) return null;
