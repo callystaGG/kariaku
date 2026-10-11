@@ -387,7 +387,7 @@ export const HomePanel: React.FC = () => {
                   id="btn-hero-register"
                   onClick={() => {
                     sound.playPop(480);
-                    openAuthModal();
+                    openAuthModal('register');
                   }}
                   className="px-6 py-3.5 rounded-2xl bg-white hover:bg-[#FFF8E1] border-2 border-[#D7CCC8] hover:border-[#D97706] text-[#4E342E] font-black text-sm sm:text-base flex items-center gap-2 transition-all cursor-pointer shadow-2xs"
                 >
@@ -1412,7 +1412,7 @@ export const HomePanel: React.FC = () => {
                 id="btn-footer-cta-register"
                 onClick={() => {
                   sound.playPop(480);
-                  openAuthModal();
+                  openAuthModal('register');
                 }}
                 className="px-7 py-3.5 bg-black/20 hover:bg-black/30 border border-white/40 text-white rounded-2xl font-black text-xs sm:text-sm transition-colors cursor-pointer"
               >

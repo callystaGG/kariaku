@@ -109,7 +109,8 @@ interface AppContextType {
   openParentalGate: () => void;
   closeParentalGate: () => void;
   verifyParentalGateSuccess: () => void;
-  openAuthModal: () => void;
+  openAuthModal: (mode?: 'login' | 'register') => void;
+  authModalMode: 'login' | 'register';
   closeAuthModal: () => void;
   openSubscriptionModal: () => void;
   closeSubscriptionModal: () => void;
@@ -275,6 +276,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Modals
   const [isParentalGateOpen, setIsParentalGateOpen] = useState<boolean>(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
   const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState<boolean>(false);
   const [isBadgeModalOpen, setIsBadgeModalOpen] = useState<boolean>(false);
   const [isAddChildModalOpen, setIsAddChildModalOpen] = useState<boolean>(false);
@@ -407,7 +409,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Modals Controls
-  const openAuthModal = () => setIsAuthModalOpen(true);
+  const openAuthModal = (mode?: 'login' | 'register') => {
+    // Callers sometimes pass a click event; only the literal 'register' selects the register tab.
+    setAuthModalMode(mode === 'register' ? 'register' : 'login');
+    setIsAuthModalOpen(true);
+  };
   const closeAuthModal = () => setIsAuthModalOpen(false);
   const openSubscriptionModal = () => setIsSubscriptionModalOpen(true);
   const closeSubscriptionModal = () => setIsSubscriptionModalOpen(false);
@@ -1173,6 +1179,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         closeParentalGate,
         verifyParentalGateSuccess,
         openAuthModal,
+        authModalMode,
         closeAuthModal,
         openSubscriptionModal,
         closeSubscriptionModal,

@@ -14,7 +14,7 @@ const results = [];
 let current = [];
 
 async function freshPage() {
-  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const context = await browser.newContext({ viewport: { width: Number(process.env.VIEWPORT_WIDTH || 1280), height: 900 } });
   const page = await context.newPage();
   page.on('console', m => {
     if (m.type() === 'error' && !m.location().url.endsWith('/favicon.ico')) current.push(`console: ${m.text()}`);
@@ -222,7 +222,8 @@ await step('auth: register a new account', async page => {
   await page.fill('#input-auth-email', 'tes-smoke@example.com');
   await page.fill('#input-auth-password', 'kata-sandi-1');
   await click(page, '#btn-auth-submit');
-  await page.waitForTimeout(700);
+  await page.waitForSelector('#btn-close-auth-modal', { state: 'detached', timeout: 5000 });
+  await page.waitForSelector('#btn-child-profile-capsule', { timeout: 5000 });
 });
 
 await step('auth: demo login', async page => {
@@ -230,7 +231,8 @@ await step('auth: demo login', async page => {
   await page.click('button:has-text("Keluar Akun")', { force: true });
   await click(page, '#btn-hero-login');
   await click(page, '#btn-quick-demo-login');
-  await page.waitForTimeout(700);
+  await page.waitForSelector('#btn-close-auth-modal', { state: 'detached', timeout: 5000 });
+  await page.waitForSelector('#btn-child-profile-capsule', { timeout: 5000 });
 });
 
 await browser.close();

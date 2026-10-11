@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { X, Lock, Mail, User, CheckCircle2, ArrowRight, ShieldAlert } from 'lucide-react';
 import { sound } from '../utils/audio';
 
 export const AuthModal: React.FC = () => {
-  const { isAuthModalOpen, closeAuthModal, loginParent, registerParent, openAdminGate } = useApp();
+  const { isAuthModalOpen, authModalMode, closeAuthModal, loginParent, registerParent, openAdminGate } = useApp();
 
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+
+  // Open on the tab the caller asked for (the 'Daftar' buttons open the register tab).
+  useEffect(() => {
+    if (isAuthModalOpen) setMode(authModalMode);
+  }, [isAuthModalOpen, authModalMode]);
 
   if (!isAuthModalOpen) return null;
 
