@@ -20,6 +20,8 @@ import {
   Check
 } from 'lucide-react';
 import { sound } from '../utils/audio';
+import { voice } from '../audio/voice';
+import { useGuide } from '../audio/useGuide';
 import confetti from 'canvas-confetti';
 import {
   TracingItem,
@@ -86,6 +88,7 @@ export const LetterTracingCanvas: React.FC<LetterTracingCanvasProps> = ({
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const [strokePointsCount, setStrokePointsCount] = useState<number>(0);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const guide = useGuide();
   const [rainbowHue, setRainbowHue] = useState<number>(0);
 
   // Demo animation state
@@ -466,7 +469,7 @@ export const LetterTracingCanvas: React.FC<LetterTracingCanvasProps> = ({
   const handleValidate = () => {
     setIsCompleted(true);
     sound.playTada();
-    sound.speakIndonesian(`Bagus sekali! Tulisan ${currentItem.char} buatanmu sangat rapi!`);
+    void voice.playLine(guide, 'benar', `Bagus sekali! Tulisan ${currentItem.char} buatanmu sangat rapi!`);
     confetti({
       particleCount: 50,
       spread: 70,

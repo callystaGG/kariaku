@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { ALL_BADGES } from '../data/modulesData';
 import { X, Award, Sparkles, CheckCircle, Lock } from 'lucide-react';
 import { getAvatarById } from '../data/avatars';
+import { voice } from '../audio/voice';
 
 export const BadgeShowcaseModal: React.FC = () => {
   const { isBadgeModalOpen, closeBadgeModal, activeChild } = useApp();
+
+  useEffect(() => {
+    if (isBadgeModalOpen) void voice.playLine(getAvatarById(activeChild.avatarId), 'bintang');
+    // Only when the modal opens (a child's tap); not on later profile changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isBadgeModalOpen]);
 
   if (!isBadgeModalOpen) return null;
 

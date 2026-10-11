@@ -5,6 +5,8 @@ import { QuizOption, QuizQuestion } from '../types';
 import { ArrowLeft, Volume2, CheckCircle2, XCircle, Sparkles, Award, RotateCcw, Home, ArrowRight, Shuffle, Zap } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { sound } from '../utils/audio';
+import { voice } from '../audio/voice';
+import { useGuide } from '../audio/useGuide';
 import { getQuestionsForQuiz } from '../utils/dynamicCurriculumEngine';
 
 export const QuizPlayer: React.FC = () => {
@@ -19,6 +21,7 @@ export const QuizPlayer: React.FC = () => {
     startPracticeQuiz
   } = useApp();
 
+  const guide = useGuide();
   const isPracticeMode = Boolean(practiceQuizSession?.isPractice);
   const currentModule = useMemo(() => {
     return LEARNING_MODULES.find(m => m.id === activeModuleId) || LEARNING_MODULES[0];
@@ -65,19 +68,21 @@ export const QuizPlayer: React.FC = () => {
   // Speak question prompt on mount / change
   useEffect(() => {
     if (!isQuizCompleted && speechEnabled && question?.speechPrompt) {
-      const timer = setTimeout(() => {
-        sound.speakSmart(question.speechPrompt, currentModule.subjectId);
+      const timer = setTimeout(async () => {
+        const played = await voice.playQuestion(guide, question.id);
+        if (!played) sound.speakSmart(question.speechPrompt, currentModule.subjectId);
       }, 350);
       return () => clearTimeout(timer);
     }
-  }, [currentQuestionIndex, isQuizCompleted, question, speechEnabled, currentModule.subjectId]);
+  }, [currentQuestionIndex, isQuizCompleted, question, speechEnabled, currentModule.subjectId, guide]);
 
-  const handleSpeakQuestion = () => {
+  const handleSpeakQuestion = async () => {
     if (isSpeaking) {
       sound.stopSpeaking();
       setIsSpeaking(false);
     } else {
-      sound.speakSmart(question.speechPrompt || question.prompt, currentModule.subjectId);
+      const played = await voice.playQuestion(guide, question.id);
+      if (!played) sound.speakSmart(question.speechPrompt || question.prompt, currentModule.subjectId);
     }
   };
 
@@ -91,18 +96,12 @@ export const QuizPlayer: React.FC = () => {
       sound.playSuccess();
       setCorrectAnswersCount(prev => prev + 1);
       if (speechEnabled) {
-        const correctPraise = [
-          'Wah, jawabanmu benar sekali! Hebat!',
-          'Horeee! Pintar sekali kamu!',
-          'Luar biasa! Jawabanmu tepat sekali!'
-        ];
-        const randomPraise = correctPraise[Math.floor(Math.random() * correctPraise.length)];
-        setTimeout(() => sound.speakIndonesian(randomPraise), 350);
+        setTimeout(() => { void voice.playLine(guide, 'benar'); }, 350);
       }
     } else {
       sound.playError();
       if (speechEnabled) {
-        setTimeout(() => sound.speakIndonesian('Hampir tepat nih! Coba kita perhatikan penjelasannya bersama ya! Tetap semangat, kamu pasti bisa!'), 350);
+        setTimeout(() => { void voice.playLine(guide, 'salah'); }, 350);
       }
     }
   };
@@ -139,9 +138,7 @@ export const QuizPlayer: React.FC = () => {
     sound.playFanfare();
 
     if (speechEnabled) {
-      setTimeout(() => {
-        sound.speakIndonesian('Horeee! Kuis selesai dengan gemilang! Bintang juaramu bertambah banyak sekali! Selamat ya, kamu hebat!');
-      }, 500);
+      setTimeout(() => { void voice.playLine(guide, 'semangat'); }, 500);
     }
 
     try {

@@ -5,6 +5,7 @@ import { getAvatarById } from '../data/avatars';
 import { GradeId } from '../types';
 import { Sparkles, Play, Award, CheckCircle2, Star, Clock, Trophy, ChevronRight, Lock, BookOpen, Crown, Check, Compass, Layers, PenTool, X } from 'lucide-react';
 import { sound } from '../utils/audio';
+import { voice } from '../audio/voice';
 import { isGradeAccessible, isModuleAccessible } from '../utils/subscriptionPermissions';
 import { LetterTracingCanvas } from './LetterTracingCanvas';
 
@@ -81,9 +82,15 @@ export const ChildDashboard: React.FC = () => {
         <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4">
           <div className="flex items-center gap-4 text-center sm:text-left">
             {/* Big Avatar */}
-            <div className="w-18 h-18 sm:w-22 sm:h-22 rounded-3xl bg-[#FAF8F0] p-1 shadow-sm shrink-0 flex items-center justify-center text-4xl sm:text-5xl border-3 border-[#FFE082] animate-float">
+            <button
+              type="button"
+              id="btn-guide-greeting"
+              aria-label={`Dengar sapaan ${avatar.name}`}
+              onClick={() => voice.playLine(avatar, 'sapa', avatar.greeting)}
+              className="w-18 h-18 sm:w-22 sm:h-22 rounded-3xl bg-[#FAF8F0] p-1 shadow-sm shrink-0 flex items-center justify-center text-4xl sm:text-5xl border-3 border-[#FFE082] animate-float cursor-pointer"
+            >
               {avatar.emoji}
-            </div>
+            </button>
 
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/30 rounded-full text-xs font-black uppercase tracking-wider backdrop-blur-xs mb-1 text-[#3E2723]">
