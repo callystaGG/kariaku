@@ -40,6 +40,12 @@ async function step(name, fn) {
 }
 
 const click = (page, selector) => page.click(selector, { force: true, timeout: 5000 });
+const openParent = async page => {
+  await click(page, '#btn-open-parent-gate');
+  await click(page, '#btn-testing-bypass-parental-gate');
+  await page.waitForSelector('#parent-tab-children', { timeout: 5000 });
+};
+
 const stars = async page => Number((await page.textContent('#btn-child-profile-capsule')).replace(/\D+/g, '').slice(-3) || 0);
 
 await step('home loads without console errors', async page => {
@@ -97,15 +103,39 @@ await step('quiz can be completed and awards stars', async page => {
   return `stars ${before} -> ${after}`;
 });
 
+await step('stars earned in a quiz survive a page reload', async page => {
+  await click(page, '#btn-quiz-module-mod-angka-1-20');
+  for (let q = 0; q < 8; q++) {
+    const option = await page.$('[id^="quiz-option-"]');
+    if (!option) break;
+    await option.click({ force: true });
+    const next = await page.waitForSelector('#btn-quiz-next', { timeout: 3000 });
+    await next.click({ force: true });
+    await page.waitForTimeout(200);
+  }
+  await page.waitForSelector('#btn-quiz-home', { timeout: 5000 });
+  const earned = await stars(page);
+  await page.reload({ waitUntil: 'networkidle' });
+  const afterReload = await stars(page);
+  if (afterReload !== earned) throw new Error(`stars changed across reload (${earned} -> ${afterReload})`);
+  return `stars ${afterReload} kept`;
+});
+
+await step('narration toggle in the menu switches state', async page => {
+  await click(page, '#btn-nav-more-options');
+  const item = page.locator('button:visible:has-text("Narasi Suara")').first();
+  const before = (await item.innerText()).replace(/\s+/g, ' ');
+  await item.click({ force: true });
+  await page.waitForTimeout(200);
+  if (!(await page.locator('button:visible:has-text("Narasi Suara")').count())) await click(page, '#btn-nav-more-options');
+  const after = (await page.locator('button:visible:has-text("Narasi Suara")').first().innerText()).replace(/\s+/g, ' ');
+  if (before === after) throw new Error(`label did not change ("${before}")`);
+  return `"${before}" -> "${after}"`;
+});
+
 await step('tracing studio opens', async page => {
   await click(page, '#btn-open-tracing-studio');
   await page.waitForSelector('canvas', { timeout: 5000 });
-});
-
-await step('parent dashboard opens through the test bypass', async page => {
-  await click(page, '#btn-open-parent-gate');
-  await click(page, '#btn-testing-bypass-parental-gate');
-  await page.waitForSelector('text=/Orang Tua|Laporan|Anak/i', { timeout: 5000 });
 });
 
 await step('menu: badge room opens and closes', async page => {
@@ -157,12 +187,6 @@ await step('menu: admin login shows the admin gate', async page => {
   await page.click('button:has-text("Login Portal Admin")', { force: true });
   await page.waitForTimeout(600);
 });
-
-const openParent = async page => {
-  await click(page, '#btn-open-parent-gate');
-  await click(page, '#btn-testing-bypass-parental-gate');
-  await page.waitForSelector('#parent-tab-children', { timeout: 5000 });
-};
 
 await step('parent dashboard: every tab renders', async page => {
   await openParent(page);

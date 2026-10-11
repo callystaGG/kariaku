@@ -338,8 +338,11 @@ class SoundEngine {
 
   public setSpeechEnabled(enabled: boolean) {
     this.speechEnabled = enabled;
-    if (!enabled && typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
+    if (!enabled) {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      this.runStopHooks();
     }
   }
 

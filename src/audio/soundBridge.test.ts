@@ -25,6 +25,17 @@ describe('SoundEngine bridge', () => {
     off1(); off2();
   });
 
+  it('turning speech off also stops recorded clips through the stop hooks', () => {
+    const hook = vi.fn();
+    const off = sound.registerStopHook(hook);
+    sound.setSpeechEnabled(true);
+    expect(hook).not.toHaveBeenCalled();
+    sound.setSpeechEnabled(false);
+    expect(hook).toHaveBeenCalledTimes(1);
+    sound.setSpeechEnabled(true);
+    off();
+  });
+
   it('reportExternalSpeech notifies speech listeners', () => {
     const listener = vi.fn();
     const off = sound.onSpeechStateChange(listener);
