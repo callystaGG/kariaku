@@ -355,7 +355,7 @@ export const Navbar: React.FC = () => {
                         setIsMoreMenuOpen(false);
                         openBankSoalModal();
                       }}
-                      className="w-full sm:hidden flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-[#4E342E] hover:bg-[#FFF8E1] hover:text-[#B45309] transition-colors cursor-pointer text-left"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-[#4E342E] hover:bg-[#FFF8E1] hover:text-[#B45309] transition-colors cursor-pointer text-left"
                     >
                       <Sparkles className="w-4 h-4 text-[#D97706]" />
                       <div className="flex-1 font-black">Bank Soal (500+ Soal)</div>
