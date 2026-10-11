@@ -22,8 +22,12 @@ export interface VoicePlayer {
 
 export function createVoicePlayer(deps: VoicePlayerDeps): VoicePlayer {
   const lastClip = new Map<string, string>();
+  // Bumped by every stop(). A playback that finds it changed after awaiting was replaced or
+  // stopped on purpose, so its rejection (AbortError) must not trigger the speech fallback.
+  let generation = 0;
 
   const stop = () => {
+    generation++;
     deps.stopUrl();
     deps.stopFallback();
   };
@@ -31,6 +35,7 @@ export function createVoicePlayer(deps: VoicePlayerDeps): VoicePlayer {
   const playLine: VoicePlayer['playLine'] = async (character, situation, fallbackText) => {
     if (!deps.speechEnabled()) return 'silent';
     stop();
+    const mine = generation;
 
     const voiceId = pickVoice(character, deps.random);
     const key = `${voiceId}:${situation}`;
@@ -42,6 +47,7 @@ export function createVoicePlayer(deps: VoicePlayerDeps): VoicePlayer {
         lastClip.set(key, url);
         return 'clip';
       } catch {
+        if (mine !== generation) return 'silent';
         // Autoplay blocked or file unreadable: fall through to the browser voice.
       }
     }
@@ -64,11 +70,13 @@ export function createVoicePlayer(deps: VoicePlayerDeps): VoicePlayer {
     }
     if (!url) return false;
     stop();
+    const mine = generation;
     try {
       await deps.playUrl(url);
       return true;
     } catch {
-      return false;
+      // Replaced or stopped on purpose: handled, the caller must not read the question aloud.
+      return mine !== generation;
     }
   };
 

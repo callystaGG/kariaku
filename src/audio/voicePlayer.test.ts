@@ -127,6 +127,48 @@ describe('playQuestion', () => {
   });
 });
 
+describe('superseded playback', () => {
+  const abort = () => Object.assign(new Error('The play() request was interrupted'), { name: 'AbortError' });
+
+  function pendingFirst() {
+    let rejectFirst!: (e: Error) => void;
+    const playUrl = vi.fn()
+      .mockImplementationOnce(() => new Promise<void>((_, reject) => { rejectFirst = reject; }))
+      .mockResolvedValue(undefined);
+    return { playUrl, rejectFirst: (e: Error) => rejectFirst(e) };
+  }
+
+  it('a line replaced by a newer line while loading is silent, not spoken by the fallback', async () => {
+    const { playUrl, rejectFirst } = pendingFirst();
+    const { player, deps } = setup({ playUrl });
+    const first = player.playLine(leo, 'benar');
+    const second = player.playLine(leo, 'benar');
+    rejectFirst(abort());
+    expect(await first).toBe('silent');
+    expect(await second).toBe('clip');
+    expect(deps.speakFallback).not.toHaveBeenCalled();
+  });
+
+  it('a line stopped while loading stays silent', async () => {
+    const { playUrl, rejectFirst } = pendingFirst();
+    const { player, deps } = setup({ playUrl });
+    const first = player.playLine(leo, 'benar');
+    player.stop();
+    rejectFirst(abort());
+    expect(await first).toBe('silent');
+    expect(deps.speakFallback).not.toHaveBeenCalled();
+  });
+
+  it('a question clip stopped while loading counts as handled so the caller does not read it aloud', async () => {
+    const { playUrl, rejectFirst } = pendingFirst();
+    const { player } = setup({ playUrl });
+    const first = player.playQuestion(leo, 'q1');
+    player.stop();
+    rejectFirst(abort());
+    expect(await first).toBe(true);
+  });
+});
+
 describe('stop', () => {
   it('stops both the clip and the speech fallback', () => {
     const { player, deps } = setup();
