@@ -62,6 +62,7 @@ export function getQuestionsForQuiz(
     result.push({
       ...q,
       id: `quiz-q-${i}-${q.id}`,
+      sourceId: q.id,
       questionNumber: result.length + 1,
       options: shuffleArray(q.options)
     });

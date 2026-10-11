@@ -69,7 +69,7 @@ export const QuizPlayer: React.FC = () => {
   useEffect(() => {
     if (!isQuizCompleted && speechEnabled && question?.speechPrompt) {
       const timer = setTimeout(async () => {
-        const played = await voice.playQuestion(guide, question.id);
+        const played = await voice.playQuestion(guide, question.sourceId ?? question.id);
         if (!played) sound.speakSmart(question.speechPrompt, currentModule.subjectId);
       }, 350);
       return () => clearTimeout(timer);
@@ -81,7 +81,7 @@ export const QuizPlayer: React.FC = () => {
       sound.stopSpeaking();
       setIsSpeaking(false);
     } else {
-      const played = await voice.playQuestion(guide, question.id);
+      const played = await voice.playQuestion(guide, question.sourceId ?? question.id);
       if (!played) sound.speakSmart(question.speechPrompt || question.prompt, currentModule.subjectId);
     }
   };

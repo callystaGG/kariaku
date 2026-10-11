@@ -172,6 +172,8 @@ export interface QuizOption {
 
 export interface QuizQuestion {
   id: string;
+  /** Id of the bank or module question this one was cloned from; recorded clips are keyed by it. */
+  sourceId?: string;
   questionNumber: number;
   prompt: string;
   speechPrompt: string;
