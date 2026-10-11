@@ -1,0 +1,155 @@
+file,voice,situation,text
+leo/sapa-01.mp3,leo,sapa,"Rawr! Halo kawan, aku Leo. Hari ini kita taklukkan angka bersama!"
+leo/sapa-02.mp3,leo,sapa,"Halo, jagoan! Leo siap menemanimu belajar. Ayo kita mulai!"
+leo/sapa-03.mp3,leo,sapa,"Rawr! Kamu datang tepat waktu! Yuk, kita latihan dulu!"
+leo/benar-01.mp3,leo,benar,Mantap! Kamu singa kecil yang tangguh!
+leo/benar-02.mp3,leo,benar,Betul sekali! Keren banget kamu!
+leo/benar-03.mp3,leo,benar,Rawr! Jawabanmu tepat! Pertahankan ya!
+leo/benar-04.mp3,leo,benar,Hebat! Satu langkah lagi menuju juara!
+leo/benar-05.mp3,leo,benar,Tepat! Kamu memang pemberani!
+leo/salah-01.mp3,leo,salah,"Tenang, singa juga pernah terpeleset. Ayo coba sekali lagi!"
+leo/salah-02.mp3,leo,salah,"Hampir! Jangan menyerah, kamu pasti bisa!"
+leo/salah-03.mp3,leo,salah,"Belum tepat, tapi kamu sudah berani mencoba. Ayo lagi!"
+leo/salah-04.mp3,leo,salah,"Tidak apa-apa. Tarik napas, lalu coba lagi bersama Leo!"
+leo/salah-05.mp3,leo,salah,"Wah, sedikit lagi! Ayo kita periksa pelan-pelan."
+leo/petunjuk-01.mp3,leo,petunjuk,"Hitung pelan-pelan, satu demi satu. Kamu pasti bisa."
+leo/petunjuk-02.mp3,leo,petunjuk,"Baca soalnya sekali lagi, cari angka yang penting."
+leo/petunjuk-03.mp3,leo,petunjuk,"Coba bayangkan bendanya, lalu hitung satu per satu."
+leo/petunjuk-04.mp3,leo,petunjuk,Ini petunjuknya: perhatikan angka yang paling besar dulu.
+leo/semangat-01.mp3,leo,semangat,Kamu hebat sekali hari ini! Rawr!
+leo/semangat-02.mp3,leo,semangat,Latihan selesai! Kamu pantas jadi juara!
+leo/semangat-03.mp3,leo,semangat,Bangga banget sama kamu! Besok kita latihan lagi ya!
+leo/bintang-01.mp3,leo,bintang,Rawr! Bintang baru untukmu!
+leo/bintang-02.mp3,leo,bintang,Kamu mengumpulkan bintang! Keren banget!
+ciko/sapa-01.mp3,ciko,sapa,Boing boing! Halo halo! Aku Ciko! Yuk yuk kita baca cerita seru!
+ciko/sapa-02.mp3,ciko,sapa,Hihihi! Kamu datang! Ciko senang senang senang!
+ciko/sapa-03.mp3,ciko,sapa,Halo teman! Ayo ayo kita lompat ke dalam cerita!
+ciko/benar-01.mp3,ciko,benar,Yeay yeay! Betul betul betul! Hihihi!
+ciko/benar-02.mp3,ciko,benar,"Wah pintarnya! Boing boing, kamu hebat!"
+ciko/benar-03.mp3,ciko,benar,Tepat sekali! Ciko mau lompat-lompat nih!
+ciko/benar-04.mp3,ciko,benar,Hore! Benar benar benar! Terus ya!
+ciko/benar-05.mp3,ciko,benar,"Hihihi, kamu pintar! Tos dulu!"
+ciko/salah-01.mp3,ciko,salah,"Ups! Hampir, hampir! Coba lagi yuk, aku temani!"
+ciko/salah-02.mp3,ciko,salah,"Eh, belum tepat. Tidak apa-apa, ayo coba lagi lagi!"
+ciko/salah-03.mp3,ciko,salah,"Boing! Kita coba sekali lagi ya, pelan-pelan!"
+ciko/salah-04.mp3,ciko,salah,"Hampir benar kok! Ayo ayo ayo, sedikit lagi!"
+ciko/salah-05.mp3,ciko,salah,"Hihihi, tidak apa-apa. Salah itu bagian dari belajar!"
+ciko/petunjuk-01.mp3,ciko,petunjuk,Lihat huruf pertamanya dulu. Ayo ayo ayo!
+ciko/petunjuk-02.mp3,ciko,petunjuk,"Baca pelan-pelan, kata demi kata ya."
+ciko/petunjuk-03.mp3,ciko,petunjuk,Coba tebak dari gambarnya! Gambarnya kasih petunjuk lho!
+ciko/petunjuk-04.mp3,ciko,petunjuk,"Eja dulu bunyinya, satu satu. Pasti bisa!"
+ciko/semangat-01.mp3,ciko,semangat,Hore! Kita selesai! Kamu hebat hebat hebat!
+ciko/semangat-02.mp3,ciko,semangat,Boing boing! Seru sekali belajar sama kamu!
+ciko/semangat-03.mp3,ciko,semangat,Ciko bangga! Besok baca cerita lagi ya!
+ciko/bintang-01.mp3,ciko,bintang,Yeay! Bintang! Bintang! Bintang untukmu!
+ciko/bintang-02.mp3,ciko,bintang,"Hihihi, kamu dapat bintang baru! Boing!"
+owi/sapa-01.mp3,owi,sapa,"Hoo-hoo. Selamat datang, peneliti cilik. Aku Owi. Hari ini kita selidiki satu rahasia alam."
+owi/sapa-02.mp3,owi,sapa,"Hmm, kamu sudah datang. Mari kita mulai pengamatan hari ini."
+owi/sapa-03.mp3,owi,sapa,"Hoo-hoo. Siapkan rasa ingin tahumu, peneliti cilik."
+owi/benar-01.mp3,owi,benar,"Hmm, pengamatan yang tepat! Kesimpulanmu benar."
+owi/benar-02.mp3,owi,benar,"Tepat sekali. Kamu teliti sekali, peneliti cilik."
+owi/benar-03.mp3,owi,benar,Hoo-hoo! Jawaban yang cermat. Bagus!
+owi/benar-04.mp3,owi,benar,Benar. Dan kamu memikirkannya dengan baik.
+owi/benar-05.mp3,owi,benar,Menarik! Hasilnya sesuai dengan dugaan yang tepat.
+owi/salah-01.mp3,owi,salah,"Hmm, menarik. Hasilnya belum sesuai. Mari kita amati sekali lagi."
+owi/salah-02.mp3,owi,salah,"Belum tepat, tetapi peneliti hebat selalu mencoba lagi."
+owi/salah-03.mp3,owi,salah,Hoo-hoo. Tidak apa-apa. Kita periksa langkahnya pelan-pelan.
+owi/salah-04.mp3,owi,salah,"Hmm, ada yang terlewat. Coba perhatikan lagi dengan teliti."
+owi/salah-05.mp3,owi,salah,Percobaan pertama jarang berhasil. Ayo kita ulangi!
+owi/petunjuk-01.mp3,owi,petunjuk,Perhatikan petunjuknya baik-baik. Apa yang berubah?
+owi/petunjuk-02.mp3,owi,petunjuk,"Hmm, coba baca soalnya sekali lagi. Kata mana yang penting?"
+owi/petunjuk-03.mp3,owi,petunjuk,Bandingkan pilihan jawabannya. Mana yang paling masuk akal?
+owi/petunjuk-04.mp3,owi,petunjuk,Amati gambarnya dulu. Ada petunjuk di sana.
+owi/semangat-01.mp3,owi,semangat,Hoo-hoo. Pengamatan hari ini selesai. Kamu hebat!
+owi/semangat-02.mp3,owi,semangat,"Hmm, kamu belajar banyak hari ini. Peneliti yang rajin!"
+owi/semangat-03.mp3,owi,semangat,"Sampai jumpa pada penyelidikan berikutnya, peneliti cilik."
+owi/bintang-01.mp3,owi,bintang,Hoo-hoo! Bintang penghargaan untuk ketelitianmu!
+owi/bintang-02.mp3,owi,bintang,"Hmm, bintang baru! Kamu memang pantas mendapatkannya."
+mimi/sapa-01.mp3,mimi,sapa,"Halo, teman baik. Aku Mimi. Senang sekali kamu datang hari ini."
+mimi/sapa-02.mp3,mimi,sapa,"Hai, sayang. Mimi di sini. Kita belajar pelan-pelan ya."
+mimi/sapa-03.mp3,mimi,sapa,"Halo! Hari ini kita belajar sambil tersenyum, ya."
+mimi/benar-01.mp3,mimi,benar,Pintar sekali. Mimi bangga sama kamu.
+mimi/benar-02.mp3,mimi,benar,"Betul. Kamu hebat, terima kasih sudah berusaha."
+mimi/benar-03.mp3,mimi,benar,"Hihihi, tepat sekali! Senyummu bikin Mimi senang."
+mimi/benar-04.mp3,mimi,benar,"Benar, ya. Pelan-pelan pun kamu bisa."
+mimi/benar-05.mp3,mimi,benar,"Wah, bagus sekali. Kamu anak yang rajin."
+mimi/salah-01.mp3,mimi,salah,"Tidak apa-apa ya. Kita coba lagi pelan-pelan, Mimi di sini."
+mimi/salah-02.mp3,mimi,salah,"Belum tepat, tapi tidak apa-apa. Kamu sudah berusaha."
+mimi/salah-03.mp3,mimi,salah,"Tarik napas dulu, ya. Lalu kita coba lagi."
+mimi/salah-04.mp3,mimi,salah,Salah itu tidak apa-apa. Kita belajar bersama.
+mimi/salah-05.mp3,mimi,salah,"Yuk, kita lihat lagi sama-sama. Pelan-pelan saja."
+mimi/petunjuk-01.mp3,mimi,petunjuk,Tarik napas dulu. Baca soalnya sekali lagi.
+mimi/petunjuk-02.mp3,mimi,petunjuk,Tidak usah buru-buru. Lihat jawabannya satu per satu.
+mimi/petunjuk-03.mp3,mimi,petunjuk,Coba tanya hatimu: mana yang baik dan benar?
+mimi/petunjuk-04.mp3,mimi,petunjuk,"Mimi bantu ya: baca pelan-pelan, lalu pilih yang kamu yakini."
+mimi/semangat-01.mp3,mimi,semangat,"Kamu sudah belajar dengan baik hari ini. Terima kasih, ya."
+mimi/semangat-02.mp3,mimi,semangat,"Wah, selesai! Mimi senang sekali belajar bersamamu."
+mimi/semangat-03.mp3,mimi,semangat,"Istirahat dulu, ya. Besok kita belajar lagi."
+mimi/bintang-01.mp3,mimi,bintang,"Bintang untuk anak yang baik hati. Selamat, ya!"
+mimi/bintang-02.mp3,mimi,bintang,"Hihihi, kamu dapat bintang baru. Mimi senang!"
+dino/sapa-01.mp3,dino,sapa,Wuush! Kapten Dino melapor! Siap meluncur ke petualangan baru?
+dino/sapa-02.mp3,dino,sapa,"Halo, awak roket! Misi hari ini sudah menunggu!"
+dino/sapa-03.mp3,dino,sapa,"Duum duum! Pegangan yang erat, kita berangkat!"
+dino/benar-01.mp3,dino,benar,Misi berhasil! Kita naik satu level!
+dino/benar-02.mp3,dino,benar,Wuush! Jawaban tepat sasaran!
+dino/benar-03.mp3,dino,benar,Kapten bangga! Kamu penjelajah andal!
+dino/benar-04.mp3,dino,benar,Tepat! Roket kita melaju makin tinggi!
+dino/benar-05.mp3,dino,benar,Keren! Satu bintang lagi ditemukan!
+dino/salah-01.mp3,dino,salah,"Wah, meleset sedikit! Putar haluan, kita coba lagi!"
+dino/salah-02.mp3,dino,salah,Radar belum menangkap jawabannya. Ayo coba lagi!
+dino/salah-03.mp3,dino,salah,"Tidak apa-apa, penjelajah juga sering salah arah."
+dino/salah-04.mp3,dino,salah,Hampir mendarat! Sekali lagi ya!
+dino/salah-05.mp3,dino,salah,"Roket sedikit goyang. Tenang, kita atur ulang!"
+dino/petunjuk-01.mp3,dino,petunjuk,"Peta petunjuk: baca soal, cari jawabannya, lalu meluncur!"
+dino/petunjuk-02.mp3,dino,petunjuk,Cek radar: perhatikan bagian yang paling penting.
+dino/petunjuk-03.mp3,dino,petunjuk,Coba bandingkan semua pilihan. Mana yang paling pas?
+dino/petunjuk-04.mp3,dino,petunjuk,"Ingat misinya: baca pelan-pelan, jangan terburu-buru."
+dino/semangat-01.mp3,dino,semangat,Misi selesai! Kamu awak terbaik!
+dino/semangat-02.mp3,dino,semangat,Roket mendarat dengan selamat. Kerja bagus!
+dino/semangat-03.mp3,dino,semangat,"Sampai jumpa di petualangan berikutnya, penjelajah!"
+dino/bintang-01.mp3,dino,bintang,Wuush! Bintang baru berhasil dikumpulkan!
+dino/bintang-02.mp3,dino,bintang,Kapten memberi bintang untukmu! Hebat!
+budi/sapa-01.mp3,budi,sapa,Halo! Aku Budi.
+budi/sapa-02.mp3,budi,sapa,"Hai, aku Budi. Yuk kita belajar bareng."
+budi/sapa-03.mp3,budi,sapa,"Halo, teman. Budi siap membantu."
+budi/benar-01.mp3,budi,benar,"Betul! Keren, kamu!"
+budi/benar-02.mp3,budi,benar,Tepat sekali. Bagus!
+budi/benar-03.mp3,budi,benar,Benar. Kamu rajin sekali.
+budi/benar-04.mp3,budi,benar,"Mantap, jawabanmu betul!"
+budi/benar-05.mp3,budi,benar,Bagus! Terus pertahankan ya.
+budi/salah-01.mp3,budi,salah,"Coba lagi, yuk. Pasti bisa."
+budi/salah-02.mp3,budi,salah,"Belum tepat. Tidak apa-apa, kita ulangi."
+budi/salah-03.mp3,budi,salah,Hampir benar. Pelan-pelan saja.
+budi/salah-04.mp3,budi,salah,Ayo kita lihat lagi soalnya bersama.
+budi/salah-05.mp3,budi,salah,Jangan menyerah. Kita coba sekali lagi.
+budi/petunjuk-01.mp3,budi,petunjuk,Baca soalnya pelan-pelan.
+budi/petunjuk-02.mp3,budi,petunjuk,Coba perhatikan angka atau kata yang penting.
+budi/petunjuk-03.mp3,budi,petunjuk,Lihat semua pilihan dulu sebelum menjawab.
+budi/petunjuk-04.mp3,budi,petunjuk,Budi kasih tahu: jangan terburu-buru.
+budi/semangat-01.mp3,budi,semangat,Selesai! Kamu rajin sekali hari ini.
+budi/semangat-02.mp3,budi,semangat,Kerja bagus. Besok kita belajar lagi.
+budi/semangat-03.mp3,budi,semangat,Budi senang belajar bersamamu.
+budi/bintang-01.mp3,budi,bintang,Kamu dapat bintang! Selamat.
+budi/bintang-02.mp3,budi,bintang,"Bintang baru, bagus sekali!"
+callysta/sapa-01.mp3,callysta,sapa,Dan aku Callysta! Yuk belajar bareng!
+callysta/sapa-02.mp3,callysta,sapa,Halo halo! Callysta di sini. Siap belajar?
+callysta/sapa-03.mp3,callysta,sapa,Hai! Hari ini pasti seru. Ayo mulai!
+callysta/benar-01.mp3,callysta,benar,"Hore, benar! Kita hebat!"
+callysta/benar-02.mp3,callysta,benar,"Yeay, tepat sekali! Kamu pintar!"
+callysta/benar-03.mp3,callysta,benar,"Wah, betul! Keren banget!"
+callysta/benar-04.mp3,callysta,benar,Hore! Jawabanmu benar semua!
+callysta/benar-05.mp3,callysta,benar,"Bagus sekali! Tos dulu, yuk!"
+callysta/salah-01.mp3,callysta,salah,"Nggak apa-apa, kita ulang bareng-bareng."
+callysta/salah-02.mp3,callysta,salah,"Hampir! Ayo coba lagi, aku temani."
+callysta/salah-03.mp3,callysta,salah,"Belum benar, tapi kamu sudah berusaha. Ayo lagi!"
+callysta/salah-04.mp3,callysta,salah,"Eh, sedikit lagi. Kita coba sekali lagi, ya!"
+callysta/salah-05.mp3,callysta,salah,"Tenang, kita pelan-pelan saja."
+callysta/petunjuk-01.mp3,callysta,petunjuk,"Lihat gambarnya dulu, ya."
+callysta/petunjuk-02.mp3,callysta,petunjuk,"Baca soalnya sekali lagi, pelan-pelan."
+callysta/petunjuk-03.mp3,callysta,petunjuk,"Coba tebak dulu, lalu cek jawabannya."
+callysta/petunjuk-04.mp3,callysta,petunjuk,Ingat apa yang tadi kita pelajari?
+callysta/semangat-01.mp3,callysta,semangat,"Hore, selesai! Kita hebat hari ini!"
+callysta/semangat-02.mp3,callysta,semangat,Seru banget belajar bareng kamu!
+callysta/semangat-03.mp3,callysta,semangat,"Sampai jumpa besok, teman!"
+callysta/bintang-01.mp3,callysta,bintang,Hore! Bintang baru untukmu!
+callysta/bintang-02.mp3,callysta,bintang,"Wah, kamu dapat bintang! Selamat!"
