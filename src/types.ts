@@ -8,6 +8,8 @@ export interface ChildProfile {
   gradeLabel: string;
   age: number;
   avatarId: string;
+  /** The avatar id this profile had before migration to the character roster; kept until the owner approves dropping it. */
+  legacyAvatarId?: string;
   totalStars: number;
   streakDays: number;
   badgesEarned: string[]; // badge IDs

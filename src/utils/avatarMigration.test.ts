@@ -38,6 +38,21 @@ describe('migrateParentAvatars', () => {
     expect(out).not.toBe(input);
   });
 
+  it('keeps the original id in legacyAvatarId when it changes the avatar', () => {
+    const input = { children: [{ avatarId: 'kancil' }, { avatarId: 'unicorn' }] };
+    const out = migrateParentAvatars(input);
+    expect(out.children).toEqual([
+      { avatarId: 'owi', legacyAvatarId: 'kancil' },
+      { avatarId: 'leo', legacyAvatarId: 'unicorn' }
+    ]);
+  });
+
+  it('adds no legacyAvatarId for current ids and never overwrites an existing one', () => {
+    const input = { children: [{ avatarId: 'mimi' }, { avatarId: 'owi', legacyAvatarId: 'gajah' }] };
+    const out = migrateParentAvatars(input);
+    expect(out.children).toEqual([{ avatarId: 'mimi' }, { avatarId: 'owi', legacyAvatarId: 'gajah' }]);
+  });
+
   it('handles a missing children array', () => {
     const input = { id: 'p2' } as { id: string; children?: Array<{ avatarId: string }> };
     expect(migrateParentAvatars(input)).toEqual({ id: 'p2' });

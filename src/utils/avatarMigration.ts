@@ -26,11 +26,21 @@ export function migrateAvatarId(id: unknown): CharacterId {
   return 'leo';
 }
 
-/** Returns a copy of the user with every child's avatarId migrated. The input is not mutated. */
-export function migrateParentAvatars<T extends { children?: Array<{ avatarId: string }> }>(user: T): T {
+/**
+ * Returns a copy of the user with every child's avatarId migrated. The input is not mutated.
+ * The replaced id is kept in legacyAvatarId (spec 4.2: old ids are not dropped from saved data).
+ */
+export function migrateParentAvatars<T extends { children?: Array<{ avatarId: string; legacyAvatarId?: string }> }>(user: T): T {
   if (!Array.isArray(user.children)) return { ...user };
   return {
     ...user,
-    children: user.children.map(child => ({ ...child, avatarId: migrateAvatarId(child.avatarId) }))
+    children: user.children.map(child => {
+      const avatarId = migrateAvatarId(child.avatarId);
+      const hadValue = typeof child.avatarId === 'string' && child.avatarId !== '';
+      if (avatarId !== child.avatarId && hadValue && child.legacyAvatarId === undefined) {
+        return { ...child, avatarId, legacyAvatarId: child.avatarId };
+      }
+      return { ...child, avatarId };
+    })
   };
 }
