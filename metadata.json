@@ -1,0 +1,6 @@
+{
+  "name": "KARIA KU - Belajar Interaktif Anak",
+  "description": "Platform belajar interaktif ceria Kurikulum Merdeka (PAUD s.d. SD 4-6) dengan 500+ bank soal & materi acak otomatis, audio narasi, reward bintang & badge, serta dasbor pemantauan orang tua.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
