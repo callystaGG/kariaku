@@ -1,140 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, Volume2, Star, Heart, Flame, Award, Smile, Music, Mic, Zap } from 'lucide-react';
-import { sound, CharacterId } from '../utils/audio';
+import { sound } from '../utils/audio';
+import { greet } from '../audio/voice';
+import { CHARACTERS, type Character } from '../data/characters';
 import confetti from 'canvas-confetti';
 
-export interface DisneyCharacter {
-  id: string;
-  charKey: CharacterId;
-  name: string;
-  role: string;
-  subject: string;
-  emoji: string;
-  badge: string;
-  voiceStyle: string;
-  soundEffectName: string;
-  color: string;
-  border: string;
-  bgGrad: string;
-  greeting: string;
-  description: string;
-  favoriteFood: string;
-  personality: string;
-}
-
-export const DISNEY_CHARACTERS: DisneyCharacter[] = [
-  {
-    id: 'char-leo',
-    charKey: 'leo',
-    name: 'Leo si Singa Juara',
-    role: 'Sahabat Cilik 8 Tahun (Pemberani & Ceria)',
-    subject: 'Matematika & Logika Berhitung',
-    emoji: '🦁',
-    badge: '👑 Raja Berhitung',
-    voiceStyle: 'Suara Ceria & Bersemangat (Pemberani & Optimis)',
-    soundEffectName: 'Auman Singa Lucu 🎺',
-    color: 'text-amber-700',
-    border: 'border-amber-300 hover:border-amber-500',
-    bgGrad: 'from-amber-100 via-orange-50 to-amber-50',
-    greeting: 'Rawrrr! Keren sekali! Halo kawan-kawan! Aku Leo si Singa Juara. Belajar berhitung dan matematika itu seru dan mudah sekali kalau kita belajar bersama. Yuk, kita mulai petualangan berhitung sekarang!',
-    description: 'Leo anak yang pemberani dan ceria, sangat menyukai tantangan berhitung dan selalu menyemangati teman-temannya.',
-    favoriteFood: 'Buah Mangga Manis 🥭',
-    personality: 'Pemberani, optimis, dan selalu riang gembira.'
-  },
-  {
-    id: 'char-ciko',
-    charKey: 'ciko',
-    name: 'Ciko si Kelinci Ceria',
-    role: 'Sahabat Cilik 7 Tahun (Lincah & Gemar Membaca)',
-    subject: 'Bahasa Indonesia & Literasi Cerita',
-    emoji: '🐰',
-    badge: '🥕 Bintang Literasi',
-    voiceStyle: 'Suara Lincah & Menggemaskan (Ceria & Riang)',
-    soundEffectName: 'Lompatan Kelinci 🌀',
-    color: 'text-rose-700',
-    border: 'border-rose-300 hover:border-rose-500',
-    bgGrad: 'from-rose-100 via-pink-50 to-rose-50',
-    greeting: 'Boing boing! Hihihi! Halo teman-temanku yang hebat! Aku Ciko si Kelinci Ceria. Membaca buku dongeng dan cerita bergambar itu asyik sekali lho! Tiba-tiba kita bisa bertualang ke negeri ajaib! Ayo, kita buka buku ceritanya dan belajar bersama!',
-    description: 'Ciko suka melompat gembira dan tertawa riang saat membaca kisah petualangan menarik.',
-    favoriteFood: 'Wortel Madu Renyah 🥕',
-    personality: 'Ceria, lincah, ekspresif, dan ramah.'
-  },
-  {
-    id: 'char-owi',
-    charKey: 'owi',
-    name: 'Profesor Owi si Burung Hantu',
-    role: 'Sahabat Cilik 9 Tahun (Penasaran & Teliti)',
-    subject: 'IPAS & Eksplorasi Sains Alam',
-    emoji: '🦉',
-    badge: '🔭 Peneliti Cilik',
-    voiceStyle: 'Suara Cerdas & Penuh Rasa Ingin Tahu (Ajaib Sekali!)',
-    soundEffectName: 'Seruling Burung Hantu 🦉',
-    color: 'text-blue-700',
-    border: 'border-blue-300 hover:border-blue-500',
-    bgGrad: 'from-blue-100 via-cyan-50 to-blue-50',
-    greeting: 'Hmm... Kacamata sainsku sudah terpasang rapi! Hoo-hooo! Tahukah kamu kenapa pelangi punya warna-warni yang indah? Rahasia alam semesta itu ajaib dan luar biasa lho! Yuk, kita selidiki rahasia sains bersama!',
-    description: 'Owi selalu penasaran tentang cara kerja alam semesta dan suka mengamati hal-hal baru dengan teliti.',
-    favoriteFood: 'Biji Bunga Matahari 🌻',
-    personality: 'Cerdas, bijak, suka bereksperimen, dan penuh rasa ingin tahu.'
-  },
-  {
-    id: 'char-mimi',
-    charKey: 'mimi',
-    name: 'Mimi si Panda Pelangi',
-    role: 'Sahabat Cilik 7 Tahun (Manis & Penyayang)',
-    subject: 'Pendidikan Pancasila & Budi Pekerti',
-    emoji: '🐼',
-    badge: '🌸 Sahabat Hangat',
-    voiceStyle: 'Suara Lembut & Riang (Ramah & Hangat)',
-    soundEffectName: 'Lonceng Gemerincing 🔔',
-    color: 'text-emerald-700',
-    border: 'border-emerald-300 hover:border-emerald-500',
-    bgGrad: 'from-emerald-100 via-teal-50 to-emerald-50',
-    greeting: 'Hihihi! Halo teman-temanku tersayang! Mimi punya pelangi kebaikan hari ini. Kalau kita saling membantu, berbagi, dan menyayangi sesama teman, hati kita jadi damai dan bahagia lho. Tetap tersenyum dan semangat ya!',
-    description: 'Mimi anak yang ramah dan suka berbagi, selalu mengingatkan teman-temannya untuk saling menyayangi dan berbuat baik.',
-    favoriteFood: 'Puding Bambu Manis 🎋',
-    personality: 'Penyayang, santun, hangat, dan murah senyum.'
-  },
-  {
-    id: 'char-dino',
-    charKey: 'dino',
-    name: 'Dino si Penjelajah Hijau',
-    role: 'Sahabat Cilik 8 Tahun (Petualang Antariksa)',
-    subject: 'Eksplorasi Antariksa & Samudra',
-    emoji: '🦕',
-    badge: '🚀 Penjelajah Bintang',
-    voiceStyle: 'Suara Penjelajah Cilik (Wuuush! Bersemangat)',
-    soundEffectName: 'Hentakan Dinosaurus 🐾',
-    color: 'text-indigo-700',
-    border: 'border-indigo-300 hover:border-indigo-500',
-    bgGrad: 'from-indigo-100 via-sky-50 to-indigo-50',
-    greeting: 'Wuuush! Duum duum! Rawrrr cilik! Siap menjelajahi bintang-bintang di luar angkasa bersamaku? Alam semesta ini luar biasa luas dan menakjubkan lho! Ayo pegangan yang erat, kita meluncur bersama!',
-    description: 'Dino gemar menirukan roket luar angkasa dan mencari rasi bintang baru di langit malam.',
-    favoriteFood: 'Daun Semanggi Segar 🍀',
-    personality: 'Penuh petualangan, berimajinasi tinggi, dan tangkas.'
-  },
-  {
-    id: 'char-kids',
-    charKey: 'kids',
-    name: 'Budi & Callysta',
-    role: 'Teman Belajar Kompak 8 Tahun (Sahabat Sejati)',
-    subject: 'Seluruh Modul Kurikulum Merdeka',
-    emoji: '👧👦',
-    badge: '🌟 Bintang Prestasi',
-    voiceStyle: 'Suara Dua Sahabat Kompak (Horeee! Semangat Bareng)',
-    soundEffectName: 'Melodi Xilofon 🎼',
-    color: 'text-purple-700',
-    border: 'border-purple-300 hover:border-purple-500',
-    bgGrad: 'from-purple-100 via-fuchsia-50 to-purple-50',
-    greeting: 'Horeee! Halo sahabat hebat! Kami Budi dan Callysta! Belajar di Karia Ku sangat menyenangkan dan membuat kita makin pintar, kan? Yuk, kita selesaikan kuis bersama dan kumpulkan semua bintang juaramu!',
-    description: 'Budi dan Callysta selalu belajar bersama, saling menyemangati, dan merayakan keberhasilan teman-temannya.',
-    favoriteFood: 'Roti Panggang Cokelat 🥪',
-    personality: 'Kompak, rajin, pantang menyerah, dan suportif.'
-  }
-];
-
 export const DisneyCharacterShowcase: React.FC = () => {
-  const [activeCharId, setActiveCharId] = useState<string>('char-leo');
+  const [activeCharId, setActiveCharId] = useState<string>('leo');
   const [speakingId, setSpeakingId] = useState<string | null>(null);
   const [isAnySpeaking, setIsAnySpeaking] = useState<boolean>(false);
 
@@ -148,9 +20,9 @@ export const DisneyCharacterShowcase: React.FC = () => {
     return () => unsub();
   }, []);
 
-  const activeCharacter = DISNEY_CHARACTERS.find(c => c.id === activeCharId) || DISNEY_CHARACTERS[0];
+  const activeCharacter = CHARACTERS.find(c => c.id === activeCharId) || CHARACTERS[0];
 
-  const handleSpeak = (char: DisneyCharacter, e?: React.MouseEvent) => {
+  const handleSpeak = (char: Character, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     
     if (speakingId === char.id && isAnySpeaking) {
@@ -161,8 +33,8 @@ export const DisneyCharacterShowcase: React.FC = () => {
 
     setSpeakingId(char.id);
     
-    // Trigger distinct cute & funny mascot voice & sound effect
-    sound.speakCharacter(char.id, char.greeting);
+    // Character jingle, then their own voice (recorded clip, or browser fallback)
+    greet(char, char.greeting);
 
     confetti({
       particleCount: 35,
@@ -196,7 +68,7 @@ export const DisneyCharacterShowcase: React.FC = () => {
 
       {/* Characters Carousel / Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        {DISNEY_CHARACTERS.map((char) => {
+        {CHARACTERS.map((char) => {
           const isSelected = char.id === activeCharId;
           const isSpeaking = speakingId === char.id;
 

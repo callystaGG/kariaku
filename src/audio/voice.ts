@@ -1,6 +1,7 @@
 import { sound } from '../utils/audio';
 import { createVoicePlayer } from './voicePlayer';
 import type { Manifest } from './voiceCatalog';
+import type { Character } from '../data/characters';
 import manifest from '../data/voiceManifest.json';
 
 let element: HTMLAudioElement | null = null;
@@ -54,3 +55,11 @@ export const voice = createVoicePlayer({
 
 // Any other speech or an explicit stop also silences a playing clip.
 sound.registerStopHook(() => voice.stop());
+
+/** Plays the character jingle, then their greeting (recorded clip or browser fallback). */
+export function greet(character: Character, fallbackText?: string) {
+  sound.playCharacterJingle(character.soundEffect);
+  setTimeout(() => {
+    void voice.playLine(character, 'sapa', fallbackText);
+  }, 320);
+}

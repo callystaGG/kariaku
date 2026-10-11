@@ -1,6 +1,7 @@
 import React from 'react';
 import { Sparkles, Star, Heart, Volume2, BookOpen, Crown } from 'lucide-react';
-import { sound } from '../utils/audio';
+import { greet } from '../audio/voice';
+import { getCharacterById } from '../data/characters';
 import confetti from 'canvas-confetti';
 
 interface DisneyHeroBackgroundProps {
@@ -9,7 +10,7 @@ interface DisneyHeroBackgroundProps {
 
 export const DisneyHeroBackground: React.FC<DisneyHeroBackgroundProps> = ({ onMascotClick }) => {
   const triggerMascot = (charKey: 'leo' | 'owi' | 'ciko' | 'mimi', name: string, emoji: string, phrase: string) => {
-    sound.speakCharacter(charKey, phrase);
+    greet(getCharacterById(charKey), phrase);
     confetti({
       particleCount: 25,
       spread: 45,
