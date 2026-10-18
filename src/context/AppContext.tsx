@@ -79,7 +79,7 @@ interface AppContextType {
   activeChildId: string;
   activeChild: ChildProfile;
   currentMode: 'child' | 'parent' | 'admin';
-  activeView: 'home_panel' | 'child_home' | 'module_learning' | 'quiz' | 'parent_dashboard' | 'parent_subscription' | 'parent_children' | 'admin_portal';
+  activeView: 'home_panel' | 'child_home' | 'module_learning' | 'quiz' | 'parent_dashboard' | 'parent_subscription' | 'parent_children' | 'admin_portal' | 'kawan_game';
   activeModuleId: string | null;
   soundEnabled: boolean;
   speechEnabled: boolean;
@@ -103,7 +103,7 @@ interface AppContextType {
   // Actions
   setActiveChildId: (id: string) => void;
   setCurrentMode: (mode: 'child' | 'parent' | 'admin') => void;
-  setActiveView: (view: 'home_panel' | 'child_home' | 'module_learning' | 'quiz' | 'parent_dashboard' | 'parent_subscription' | 'parent_children' | 'admin_portal') => void;
+  setActiveView: (view: 'home_panel' | 'child_home' | 'module_learning' | 'quiz' | 'parent_dashboard' | 'parent_subscription' | 'parent_children' | 'admin_portal' | 'kawan_game') => void;
   setActiveModuleId: (id: string | null) => void;
   openParentalGate: () => void;
   closeParentalGate: () => void;
@@ -138,7 +138,7 @@ interface AppContextType {
   registerParent: (name: string, email: string) => void;
   logoutParent: () => void;
   addChild: (data: { name: string; grade: GradeId; age: number; avatarId: string }) => void;
-  updateChild: (id: string, data: Partial<ChildProfile>) => void;
+  updateChild: (id: string, data: Partial<ChildProfile>, silent?: boolean) => void;
   deleteChild: (id: string) => void;
   recordQuizCompletion: (moduleId: string, score: number, totalQuestions: number, stars: number, badgeId?: string) => void;
   updateSubscription: (planId: string, paymentMethod?: string) => void;
@@ -261,7 +261,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   const [currentMode, setCurrentMode] = useState<'child' | 'parent' | 'admin'>('child');
-  const [activeView, setActiveView] = useState<'home_panel' | 'child_home' | 'module_learning' | 'quiz' | 'parent_dashboard' | 'parent_subscription' | 'parent_children' | 'admin_portal'>(() => {
+  const [activeView, setActiveView] = useState<'home_panel' | 'child_home' | 'module_learning' | 'quiz' | 'parent_dashboard' | 'parent_subscription' | 'parent_children' | 'admin_portal' | 'kawan_game'>(() => {
     // If user is already logged in from localStorage, open child_home directly, else show home_panel
     const hasValidLogin = Boolean(parentUser && parentUser.id !== 'parent-guest' && parentUser.email && parentUser.email.trim().length > 0);
     return hasValidLogin ? 'child_home' : 'home_panel';
@@ -691,14 +691,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     sound.playFanfare();
   };
 
-  const updateChild = (id: string, data: Partial<ChildProfile>) => {
+  const updateChild = (id: string, data: Partial<ChildProfile>, silent?: boolean) => {
     const updatedParent: ParentUser = {
       ...parentUser,
       children: (parentUser.children || []).map(c => (c.id === id ? { ...c, ...data } : c))
     };
     setParentUser(updatedParent);
     syncUserToUsersList(updatedParent);
-    sound.playSuccess();
+    if (!silent) sound.playSuccess();
   };
 
   const deleteChild = (id: string) => {

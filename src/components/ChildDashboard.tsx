@@ -124,6 +124,27 @@ export const ChildDashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* Kawan Belajar: game 7 pelajaran dengan suara narasi */}
+      <button
+        type="button"
+        id="btn-open-kawan-game"
+        onClick={() => {
+          sound.playPop(560);
+          setCurrentMode('child');
+          setActiveView('kawan_game');
+        }}
+        className="w-full text-left flex items-center gap-4 bg-gradient-to-r from-[#7CC8FF] via-[#B9A7FF] to-[#FFB3D1] hover:brightness-105 active:scale-[0.99] transition rounded-3xl p-4 sm:p-5 border-4 border-white shadow-md cursor-pointer"
+      >
+        <span className="text-4xl sm:text-5xl shrink-0">🎮</span>
+        <span className="flex-1">
+          <span className="block text-lg sm:text-2xl font-black font-heading text-[#2D2A5A]">Main Kawan Belajar</span>
+          <span className="block text-xs sm:text-sm font-extrabold text-[#2D2A5A]/80">
+            Membaca, menulis, logika, matematika, Inggris, hitung cepat &amp; sempoa bersama Awan, Bintang, dan Bulan
+          </span>
+        </span>
+        <ChevronRight className="w-6 h-6 text-[#2D2A5A] shrink-0" />
+      </button>
+
       {/* Interactive Grade Selector (Semua Jenjang Terbuka) */}
       <div className="bg-[#FAF8F0] rounded-3xl p-4 sm:p-5 border-2 border-[#E7E2D6] shadow-2xs space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">

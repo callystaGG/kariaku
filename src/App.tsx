@@ -5,6 +5,7 @@ import { ChildDashboard } from './components/ChildDashboard';
 import { HomePanel } from './components/HomePanel';
 import { ModuleViewer } from './components/ModuleViewer';
 import { QuizPlayer } from './components/QuizPlayer';
+import { KawanGame } from './components/KawanGame';
 import { ParentDashboard } from './components/ParentDashboard';
 import { AdminPortal } from './components/AdminPortal';
 import { ParentalGateModal } from './components/ParentalGateModal';
@@ -33,6 +34,8 @@ const AppContent: React.FC = () => {
           <ModuleViewer />
         ) : activeView === 'quiz' ? (
           <QuizPlayer />
+        ) : activeView === 'kawan_game' ? (
+          <KawanGame />
         ) : currentMode === 'admin' ? (
           <AdminPortal />
         ) : currentMode === 'parent' ? (
