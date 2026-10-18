@@ -1,0 +1,26 @@
+{
+  "voicestudio": {
+    "model": "tts-1",
+    "format": "mp3",
+    "voices": {
+      "awan": "",
+      "bintang": "",
+      "bulan": ""
+    },
+    "extra": {}
+  },
+  "edge": {
+    "rate": "-8%",
+    "paralel": 4,
+    "id": {
+      "awan": { "voice": "id-ID-GadisNeural", "pitch": "+0Hz" },
+      "bintang": { "voice": "id-ID-GadisNeural", "pitch": "+30Hz" },
+      "bulan": { "voice": "id-ID-ArdiNeural", "pitch": "+0Hz" }
+    },
+    "en": {
+      "awan": "en-US-JennyNeural",
+      "bintang": "en-US-AnaNeural",
+      "bulan": "en-US-GuyNeural"
+    }
+  }
+}

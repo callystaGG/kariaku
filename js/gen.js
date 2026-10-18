@@ -294,7 +294,10 @@ function deductionQ(n) {
   const who = sample(NAMES, n), trait = pick([['tinggi', 'lebih tinggi', 'paling tinggi', 'paling pendek'], ['cepat', 'lebih cepat', 'paling cepat', 'paling lambat'], ['berat', 'lebih berat', 'paling berat', 'paling ringan']]);
   const st = []; for (let i = 0; i < n - 1; i++) st.push(`${who[i]} ${trait[1]} dari ${who[i + 1]}.`);
   const top = Math.random() < 0.5, ans = top ? who[0] : who[n - 1];
-  return { type: 'choice', key: `ded-${who.join('')}-${top ? 1 : 0}`, prompt: `Siapa yang ${top ? trait[2] : trait[3]}?`, visual: `<div class="story">${shuffle(st).join(' ')}</div>`, say: [shuffle(st).join(' '), `Siapa yang ${top ? trait[2] : trait[3]}`], opts: shuffle(who.slice()).map((w) => ({ v: w, html: `<span class="big sm">${w}</span>` })), answer: ans, cols: n > 3 ? 2 : 3 };
+  /* Tiap pernyataan dibacakan sebagai klipnya sendiri (bukan satu kalimat panjang) agar jumlah rekaman terbatas;
+     urutannya sama dengan yang tampil di layar. */
+  const sh = shuffle(st);
+  return { type: 'choice', key: `ded-${who.join('')}-${top ? 1 : 0}`, prompt: `Siapa yang ${top ? trait[2] : trait[3]}?`, visual: `<div class="story">${sh.join(' ')}</div>`, say: [...sh, `Siapa yang ${top ? trait[2] : trait[3]}`], opts: shuffle(who.slice()).map((w) => ({ v: w, html: `<span class="big sm">${w}</span>` })), answer: ans, cols: n > 3 ? 2 : 3 };
 }
 function analogyQ() {
   const bank = [['Burung', 'terbang', 'Ikan', 'berenang', ['berlari', 'tidur']], ['Siang', 'terang', 'Malam', 'gelap', ['panas', 'ramai']], ['Pensil', 'menulis', 'Sendok', 'makan', ['tidur', 'berjalan']],

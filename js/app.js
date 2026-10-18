@@ -32,6 +32,7 @@ function bubble(text, id) { return `<div class="bubble" ${id ? `id="${id}"` : ''
 
 /* ---------- Layar depan ---------- */
 function screenHome() {
+  A.setVoice('awan');
   app().className = 'home';
   app().innerHTML = `${topbar({})}
   <main class="center">
@@ -47,6 +48,7 @@ function screenHome() {
 
 /* ---------- Pilih kelas ---------- */
 function screenLevels() {
+  A.setVoice('awan'); /* yang tampil: Awan */
   app().className = 'levels';
   app().innerHTML = `${topbar({ back: 'goHome' })}
   <main class="center">
@@ -59,6 +61,7 @@ function screenLevels() {
 /* ---------- Pilih pelajaran ---------- */
 function screenSubjects() {
   const L = lvl(S.level);
+  A.setVoice('bulan'); /* yang tampil: Bulan */
   app().className = 'subjects';
   app().innerHTML = `${topbar({ back: 'goLevels', mid: `<span class="pill" style="background:${L.color}">${L.name}</span>` })}
   <main class="center">
@@ -87,6 +90,7 @@ function startSession(subjId) {
     lastGen: -1, newWeak: [], cur: null, ctl: null, t0: 0, timer: null, mood: 'normal' };
   S.weak[key] = [];
   A.ac();
+  A.setVoice(subj.guide);
   renderSessionShell();
   say(subj.intro, 'happy');
   setTimeout(nextQ, 1100);

@@ -9,3 +9,5 @@ coverage/
 
 # Local scratch for the plan executor
 .superpowers/
+
+__pycache__/

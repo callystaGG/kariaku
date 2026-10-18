@@ -7,8 +7,6 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-python -m pip install --quiet edge-tts
-python "%~dp0buat_suara.py"
+python "%~dp0buat_suara.py" %*
 echo.
-echo Selesai. Buka index.html untuk bermain.
 pause

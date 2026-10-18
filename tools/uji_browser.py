@@ -4,7 +4,8 @@ Menjalankan server lokal, menjawab benar lewat antarmuka sungguhan (klik, ketik,
 import http.server, socketserver, threading, os, sys, json, time
 from playwright.sync_api import sync_playwright
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.environ.get('APP_ROOT') or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+UJI_AUDIO = os.environ.get('UJI_AUDIO') == '1'  # 1 = folder audio sudah terisi: periksa suara tiap karakter dan klip yang hilang
 PORT = 8123
 SHOTS = os.path.join(os.environ.get('SHOTS', '/tmp/kawan-shots'))
 os.makedirs(SHOTS, exist_ok=True)
@@ -113,6 +114,16 @@ def main():
         page.on('pageerror', lambda e: errs.append('pageerror: ' + str(e)))
         page.on('console', lambda m: errs.append('console.error: ' + m.text) if m.type == 'error' and 'Failed to load resource' not in m.text and 'fonts.g' not in m.text else None)
         page.route('**/fonts.g*/**', lambda r: r.abort())
+        klip = []  # alamat klip suara yang diminta peramban
+        page.on('request', lambda r: klip.append(r.url) if '/audio/' in r.url else None)
+        tak_ada = []  # klip yang diminta tetapi tidak ada di server (404)
+        page.on('response', lambda r: tak_ada.append(r.url) if '/audio/' in r.url and r.status >= 400 else None)
+        def cek_suara(subj):
+            if not UJI_AUDIO: return
+            guide = page.evaluate(f"SUBJECTS['{subj}'].guide")
+            salah = [u for u in klip if f'/audio/{guide}/' not in u]
+            if not klip: raise RuntimeError('tidak ada klip suara yang diminta')
+            if salah: raise RuntimeError(f'klip bukan suara {guide}: {salah[0]}')
         page.goto(f'http://127.0.0.1:{PORT}/index.html')
         page.wait_for_selector('.logo')
         page.screenshot(path=os.path.join(SHOTS, 'home.png'))
@@ -123,14 +134,23 @@ def main():
                 key = f'{lid}.{s}'
                 if only and key not in only and lid not in only: continue
                 try:
+                    klip.clear()
                     h, stars = play(page, lid, s, shot=f'{key}.png')
+                    cek_suara(s)
                     print(f'OK   {key:14s} {h} soal, {stars} bintang')
                 except Exception as e:
                     fails.append(key); print(f'GAGAL {key}: {str(e)[:200]}')
                     page.screenshot(path=os.path.join(SHOTS, f'FAIL-{key}.png'))
         if not only:
+            klip.clear()
             h, stars = play(page, 'tkb', 'mat', wrong_first=True)
+            cek_suara('mat')
             print(f'OK   jalur salah-dulu tkb.mat {h} soal, {stars} bintang')
+        if UJI_AUDIO:
+            st = page.evaluate("A.played")
+            print(f"Klip diputar sampai habis: {st}, klip tidak ada di server (404): {len(set(tak_ada))}")
+            for u in sorted(set(tak_ada))[:8]: print('   hilang:', u.split('/audio/')[1])
+            if tak_ada or not st: fails.append('klip-hilang')
         # tampilan tiap layar
         for name, js in [('levels', "screenLevels()"), ('subjects', "S.level='sd34'; screenSubjects()"), ('badges', "screenBadges()")]:
             page.evaluate(js); page.wait_for_timeout(100); page.screenshot(path=os.path.join(SHOTS, f'{name}.png'))

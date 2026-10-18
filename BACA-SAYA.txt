@@ -14,20 +14,18 @@ ISI GAME
 CARA MAIN (TANPA SUARA)
 Buka file index.html di Chrome, Edge, atau Safari. Game langsung jalan.
 
-AGAR SUARANYA NATURAL SEPERTI MANUSIA (SATU KALI SAJA)
+AGAR TIAP KARAKTER PUNYA SUARA SENDIRI (SATU KALI SAJA)
 Game ini TIDAK memakai suara robot bawaan browser. Suara dimainkan dari rekaman di folder "audio".
-Rekaman dibuat sekali memakai suara saraf (neural) yang natural:
-  Indonesia : id-ID-GadisNeural
-  Inggris   : en-US-JennyNeural
-Langkah di Windows:
-  1. Pasang Python dari python.org (centang "Add Python to PATH").
-  2. Pastikan komputer tersambung internet.
-  3. Klik dua kali  tools\buat_suara.bat
-  4. Tunggu sampai selesai (sekitar 1.600 potongan suara, beberapa menit). Folder "audio" akan terisi.
-Di Mac atau Linux: jalankan  sh tools/buat_suara.sh
-Jika ada yang gagal karena internet putus, jalankan lagi. Yang sudah jadi akan dilewati.
-Ingin suara lain? Buka tools/buat_suara.py dan ubah VOICE_ID atau VOICE_EN.
-Anda juga boleh merekam suara sendiri atau suara orang tua: ganti file mp3 di folder "audio"
+Awan, Bintang, dan Bulan masing-masing punya folder suara sendiri: audio/awan, audio/bintang, audio/bulan.
+Rekaman dibuat sekali dengan VoiceStudio yang berjalan di komputer Anda (suara bisa dirancang dari deskripsi teks).
+Langkah lengkapnya ada di  tools/SUARA.md. Ringkasnya:
+  1. Pasang VoiceStudio dari https://github.com/debpalash/VoiceStudio/releases dan rancang tiga suara.
+  2. Pasang Python, lalu jalankan:  python tools/buat_suara.py --cek
+  3. Isi nama suara tiap karakter di tools/suara.json.
+  4. Coba dulu:  python tools/buat_suara.py --batas 10    lalu buat semuanya:  python tools/buat_suara.py
+Cadangan tanpa VoiceStudio: python tools/buat_suara.py --mesin edge  (suara Microsoft, butuh internet).
+Jika ada yang gagal, jalankan lagi. Yang sudah jadi akan dilewati.
+Anda juga boleh merekam suara sendiri atau suara orang tua: ganti file mp3 di folder "audio/<karakter>"
 dengan nama file yang sama (daftar kalimat dan nama filenya ada di tools/manifest.json).
 
 BERMAIN DI TABLET ATAU HP
@@ -40,7 +38,7 @@ MENAMBAH ATAU MENGUBAH SOAL
 - Bank kalimat dan bacaan: js/content.js
 - Pembuat soal per jenjang dan pelajaran: js/gen.js (bagian GENS di bagian bawah)
 - Setelah mengubah teks yang diucapkan, jalankan:  node tools/check.js --manifest
-  lalu jalankan lagi tools/buat_suara.bat untuk membuat rekaman kalimat yang baru.
+  lalu jalankan lagi  python tools/buat_suara.py  untuk membuat rekaman kalimat yang baru.
 - Pemeriksa otomatis: node tools/check.js  (memeriksa puluhan ribu soal acak)
 
 CATATAN

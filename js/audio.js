@@ -8,18 +8,23 @@ function fnv1a(str) {
   return h.toString(16).padStart(8, '0');
 }
 const clipOf = (p) => (typeof p === 'string' ? { l: 'id', t: p } : p);
-const clipFile = (p) => { const c = clipOf(p); return `audio/${c.l}_${fnv1a(c.t)}.mp3`; };
+/* Tiap karakter punya suara sendiri: rekaman ada di audio/<karakter>/. Awan juga menjadi suara bawaan. */
+const VOICES = ['awan', 'bintang', 'bulan'];
+const DEFAULT_VOICE = 'awan';
+const clipFile = (p, voice) => { const c = clipOf(p); const v = VOICES.includes(voice) ? voice : DEFAULT_VOICE; return `audio/${v}/${c.l}_${fnv1a(c.t)}.mp3`; };
 
 const A = {
-  voiceOn: true, sfxOn: true, token: 0, current: null, missing: 0, played: 0, probe: null,
+  voice: DEFAULT_VOICE, voiceOn: true, sfxOn: true, token: 0, current: null, missing: 0, played: 0, probe: null,
   ctx: null,
 
+  /* Pilih suara karakter yang sedang tampil di layar */
+  setVoice(v) { A.voice = VOICES.includes(v) ? v : DEFAULT_VOICE; },
   setSound(on) { A.voiceOn = on; A.sfxOn = on; if (!on) A.stop(); },
   stop() { A.token++; if (A.current) { try { A.current.pause(); } catch (e) {} A.current = null; } },
 
   playClip(p, token) {
     return new Promise((resolve) => {
-      const a = new Audio(clipFile(p));
+      const a = new Audio(clipFile(p, A.voice));
       A.current = a;
       let done = false;
       const end = (ok) => { if (done) return; done = true; if (ok) A.played++; else A.missing++; resolve(ok); };
@@ -45,7 +50,7 @@ const A = {
   /* Cek apakah file suara tersedia (untuk pesan di layar depan) */
   check() {
     return new Promise((resolve) => {
-      const a = new Audio(clipFile(PHRASES.welcome));
+      const a = new Audio(clipFile(PHRASES.welcome, DEFAULT_VOICE));
       a.onerror = () => resolve(false);
       a.oncanplaythrough = () => resolve(true);
       a.preload = 'auto';

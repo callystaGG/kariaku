@@ -1,6 +1,6 @@
 /* Pemeriksa isi game + pembuat manifes suara.
    Jalankan:  node tools/check.js          (periksa semua pembuat soal)
-              node tools/check.js --manifest   (juga menulis tools/manifest.json) */
+              node tools/check.js --manifest   (juga menulis tools/manifest.json; --manifest-out=BERKAS untuk tujuan lain) */
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const root = path.join(__dirname, '..');
 const src = ['assets', 'content', 'gen', 'audio'].map((f) => fs.readFileSync(path.join(root, 'js', f + '.js'), 'utf8')).join('\n;\n');
@@ -8,26 +8,30 @@ const sandbox = { console, TextEncoder, Math };
 vm.createContext(sandbox);
 vm.runInContext(src, sandbox, { filename: 'game.js' });
 
-const REPS = Number(process.env.REPS || 60);
+/* Membuat manifes memakai lebih banyak contoh soal (200) supaya kalimat yang jarang muncul ikut terdaftar. */
+const REPS = Number(process.env.REPS || (process.argv.includes('--manifest') ? 200 : 60));
 const result = vm.runInContext(`(function () {
-  const errors = [], clips = new Map(), stats = {};
-  const addClip = (p) => {
+  const errors = [], stats = {};
+  const ALL = VOICES.slice();
+  const perVoice = {}; ALL.forEach((v) => { perVoice[v] = new Map(); });
+  /* Mencatat klip untuk suara-suara yang membacakannya. voices kosong = hanya memeriksa isi klip. */
+  const addClip = (p, voices) => {
     if (p === undefined || p === null) return;
     const c = clipOf(p);
     if (!c.t || typeof c.t !== 'string' || !c.t.trim()) { errors.push('klip kosong: ' + JSON.stringify(p)); return; }
-    clips.set(clipFile(p), { file: clipFile(p), l: c.l, t: c.t });
+    for (const v of voices) perVoice[v].set(clipFile(p, v), { file: clipFile(p, v), v, l: c.l, t: c.t });
   };
-  const walk = (o) => {
-    if (Array.isArray(o)) { o.forEach(walk); return; }
+  const walk = (o, voices) => {
+    if (Array.isArray(o)) { o.forEach((x) => walk(x, voices)); return; }
     if (o && typeof o === 'object') {
       for (const k of Object.keys(o)) {
-        if ((k === 'say' || k === 'sayAnswer') && Array.isArray(o[k])) o[k].forEach(addClip);
-        else walk(o[k]);
+        if ((k === 'say' || k === 'sayAnswer') && Array.isArray(o[k])) o[k].forEach((p) => addClip(p, voices));
+        else walk(o[k], voices);
       }
     }
   };
   const strip = (h) => String(h || '').replace(/<[^>]+>/g, '').trim();
-  function check(q, where) {
+  function check(q, where, voices) {
     const e = (m) => errors.push(where + ' [' + (q && q.key) + ']: ' + m);
     if (!q || typeof q !== 'object') return e('soal kosong');
     if (!['choice', 'keypad', 'trace', 'abacus', 'tiles', 'flash', 'memory'].includes(q.type)) return e('tipe aneh ' + q.type);
@@ -53,16 +57,17 @@ const result = vm.runInContext(`(function () {
     if (q.type === 'abacus') { if (!Number.isInteger(q.target) || q.target < 0 || q.target > Math.pow(10, q.rods) - 1) e('target sempoa di luar batas ' + q.target); }
     if (q.type === 'flash') { if (q.seq.reduce((a, b) => a + b, 0) !== q.answer) e('jumlah kilat salah'); }
     if (q.type === 'memory') { if (q.value !== q.answer || q.value >= Math.pow(10, q.rods)) e('memory salah'); }
-    walk(q);
+    walk(q, voices);
   }
   let total = 0;
   for (const L of LEVELS) {
     for (const s of AVAIL[L.id]) {
       const list = GENS[L.id][s];
       if (!list || !list.length) { errors.push('tidak ada pembuat soal: ' + L.id + '.' + s); continue; }
+      const voices = [SUBJECTS[s].guide]; /* soal dibacakan pemandu pelajarannya */
       list.forEach((fn, gi) => {
         for (let t = 1; t <= 3; t++) for (let r = 0; r < ${REPS}; r++) {
-          try { check(fn(t), L.id + '.' + s + '#' + gi + ' t' + t); total++; }
+          try { check(fn(t), L.id + '.' + s + '#' + gi + ' t' + t, voices); total++; }
           catch (err) { errors.push(L.id + '.' + s + '#' + gi + ' t' + t + ' melempar: ' + err.message); }
         }
       });
@@ -70,28 +75,32 @@ const result = vm.runInContext(`(function () {
     }
   }
   /* Potongan suara tetap: kalimat umpan balik, pengantar, angka, kosakata, bank bacaan */
-  PHRASES.praise.forEach(addClip); PHRASES.retry.forEach(addClip);
-  ['reveal', 'gentle', 'welcome', 'chooseLevel', 'chooseSubject', 'done3', 'done2', 'done1', 'traceTry', 'listen', 'ready'].forEach((k) => addClip(PHRASES[k]));
-  Object.values(SUBJECTS).forEach((s) => addClip(s.intro));
-  for (let n = 0; n <= 99; n++) addClip(idNum(n));
-  addClip('seratus'); addClip('seribu');
-  for (let h = 2; h <= 9; h++) { addClip(U_ID[h] + ' ratus'); addClip(U_ID[h] + ' ribu'); }
-  Object.keys(LETTER_SAY).forEach((k) => addClip(LETTER_SAY[k]));
-  SYLLABLES.forEach(addClip);
-  Object.keys(OBJ).forEach((k) => { addClip(OBJ[k].id); addClip(EN(OBJ[k].en)); addClip('Ini ' + OBJ[k].id + '.'); addClip(EN('This is ' + (/^[aeiou]/.test(OBJ[k].en) ? 'an ' : 'a ') + OBJ[k].en + '.')); });
-  COLORS_EN.forEach((c) => addClip(EN(c.en)));
-  EN_NUM.forEach((w, i) => { if (i > 0) addClip(EN(w)); });
-  DAYS.forEach((d) => addClip(EN(d[0])));
-  EN_GREET.forEach((g) => { addClip(EN(g.q)); g.o.forEach((o) => addClip(EN(o))); });
-  EN_TRANS.forEach((p) => { addClip(p[0]); addClip(EN(p[1])); });
-  EN_GRAMMAR.forEach((g) => addClip(EN(g.s.replace('___', g.a))));
-  EN_READ.forEach((p) => { addClip(EN(p.t)); p.qs.forEach((q) => { addClip(EN(q.q)); addClip(EN(q.a)); }); });
-  READ_SD12.forEach((r) => { addClip(r.t); addClip(r.q); addClip(r.a); });
-  [READ_SD34, READ_SD56].forEach((bank) => bank.forEach((p) => { addClip(p.t); p.qs.forEach((q) => { addClip(q.q); addClip(q.a); }); }));
-  SENTENCES_SD56.forEach(addClip);
-  WORDS_TK.forEach(addClip);
-  ['Mana angka', 'Mana huruf', 'Mana suku kata', 'Mana gambar', 'Mana warna'].forEach(addClip);
-  return { errors, total, stats, clips: Array.from(clips.values()) };
+  const addFixed = (p) => addClip(p, ALL);
+  PHRASES.praise.forEach(addFixed); PHRASES.retry.forEach(addFixed);
+  ['reveal', 'gentle', 'welcome', 'chooseLevel', 'chooseSubject', 'done3', 'done2', 'done1', 'traceTry', 'listen', 'ready'].forEach((k) => addFixed(PHRASES[k]));
+  Object.values(SUBJECTS).forEach((s) => addFixed(s.intro));
+  /* Bank kosakata: dicatat untuk pemandu yang membacakannya dalam soal. Yang tak pernah muncul di contoh soal dibuat untuk semua suara. */
+  const staticClips = []; const addStatic = (p) => staticClips.push(p);
+  for (let n = 0; n <= 99; n++) addStatic(idNum(n));
+  addStatic('seratus'); addStatic('seribu');
+  for (let h = 2; h <= 9; h++) { addStatic(U_ID[h] + ' ratus'); addStatic(U_ID[h] + ' ribu'); }
+  Object.keys(LETTER_SAY).forEach((k) => addStatic(LETTER_SAY[k]));
+  SYLLABLES.forEach(addStatic);
+  Object.keys(OBJ).forEach((k) => { addStatic(OBJ[k].id); addStatic(EN(OBJ[k].en)); addStatic('Ini ' + OBJ[k].id + '.'); addStatic(EN('This is ' + (/^[aeiou]/.test(OBJ[k].en) ? 'an ' : 'a ') + OBJ[k].en + '.')); });
+  COLORS_EN.forEach((c) => addStatic(EN(c.en)));
+  EN_NUM.forEach((w, i) => { if (i > 0) addStatic(EN(w)); });
+  DAYS.forEach((d) => addStatic(EN(d[0])));
+  EN_GREET.forEach((g) => { addStatic(EN(g.q)); g.o.forEach((o) => addStatic(EN(o))); });
+  EN_TRANS.forEach((p) => { addStatic(p[0]); addStatic(EN(p[1])); });
+  EN_GRAMMAR.forEach((g) => addStatic(EN(g.s.replace('___', g.a))));
+  EN_READ.forEach((p) => { addStatic(EN(p.t)); p.qs.forEach((q) => { addStatic(EN(q.q)); addStatic(EN(q.a)); }); });
+  READ_SD12.forEach((r) => { addStatic(r.t); addStatic(r.q); addStatic(r.a); });
+  [READ_SD34, READ_SD56].forEach((bank) => bank.forEach((p) => { addStatic(p.t); p.qs.forEach((q) => { addStatic(q.q); addStatic(q.a); }); }));
+  SENTENCES_SD56.forEach(addStatic);
+  WORDS_TK.forEach(addStatic);
+  ['Mana angka', 'Mana huruf', 'Mana suku kata', 'Mana gambar', 'Mana warna'].forEach(addStatic);
+  staticClips.forEach((p) => { addClip(p, []); const done = ALL.some((v) => perVoice[v].has(clipFile(p, v))); if (!done) addClip(p, ALL); });
+  return { errors, total, stats, clips: ALL.flatMap((v) => Array.from(perVoice[v].values())) };
 })()`, sandbox);
 
 const errs = result.errors;
@@ -101,9 +110,12 @@ const uniq = [...new Set(errs)];
 if (uniq.length) { console.log(`\nKESALAHAN (${uniq.length} unik):`); uniq.slice(0, 40).forEach((e) => console.log(' - ' + e)); }
 else console.log('Tidak ada kesalahan.');
 const byLang = result.clips.reduce((a, c) => { a[c.l] = (a[c.l] || 0) + 1; return a; }, {});
-console.log('Potongan suara:', result.clips.length, byLang);
+const byVoice = result.clips.reduce((a, c) => { a[c.v] = (a[c.v] || 0) + 1; return a; }, {});
+console.log('Potongan suara:', result.clips.length, byLang, 'per karakter:', byVoice);
 if (process.argv.includes('--manifest')) {
-  fs.writeFileSync(path.join(root, 'tools', 'manifest.json'), JSON.stringify(result.clips.sort((a, b) => a.file.localeCompare(b.file)), null, 1));
-  console.log('Menulis tools/manifest.json');
+  const outArg = process.argv.find((a) => a.startsWith('--manifest-out='));
+  const target = outArg ? outArg.slice('--manifest-out='.length) : path.join(root, 'tools', 'manifest.json');
+  fs.writeFileSync(target, JSON.stringify(result.clips.sort((a, b) => a.file.localeCompare(b.file)), null, 1));
+  console.log('Menulis ' + path.relative(root, target));
 }
 process.exit(uniq.length ? 1 : 0);
