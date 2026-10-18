@@ -1,0 +1,11 @@
+{
+  "name": "kawan-belajar",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "node tools/check.js",
+    "lint": "node tools/check.js"
+  }
+}

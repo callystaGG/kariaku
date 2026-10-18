@@ -361,14 +361,23 @@ function readPassageQ(bank) {
 
 /* ============ MENULIS ============ */
 const PATHS = {
-  'garis lurus ke bawah': [[[0.5, 0.12], [0.5, 0.88]]],
-  'garis lurus mendatar': [[[0.12, 0.5], [0.88, 0.5]]],
-  'garis miring': [[[0.2, 0.85], [0.8, 0.15]]],
-  'garis zigzag': [[[0.08, 0.7], [0.29, 0.3], [0.5, 0.7], [0.71, 0.3], [0.92, 0.7]]],
-  'garis lengkung': [Array.from({ length: 25 }, (_, i) => { const a = Math.PI * (i / 24); return [0.5 - 0.38 * Math.cos(a), 0.7 - 0.45 * Math.sin(a)]; })],
-  'lingkaran': [Array.from({ length: 41 }, (_, i) => { const a = 2 * Math.PI * (i / 40) - Math.PI / 2; return [0.5 + 0.34 * Math.cos(a), 0.5 + 0.34 * Math.sin(a)]; })],
-  'persegi': [[[0.2, 0.2], [0.8, 0.2], [0.8, 0.8], [0.2, 0.8], [0.2, 0.2]]],
-  'segitiga': [[[0.5, 0.15], [0.85, 0.82], [0.15, 0.82], [0.5, 0.15]]]
+  'garis lurus ke bawah': [[[0.5, 0.15], [0.5, 0.85]]],
+  'garis lurus mendatar': [[[0.15, 0.5], [0.85, 0.5]]],
+  'garis miring': [[[0.22, 0.82], [0.78, 0.18]]],
+  'garis zigzag': [[[0.10, 0.72], [0.30, 0.28], [0.50, 0.72], [0.70, 0.28], [0.90, 0.72]]],
+  'garis lengkung': [Array.from({ length: 25 }, (_, i) => { const a = Math.PI * (i / 24); return [0.5 - 0.36 * Math.cos(a), 0.7 - 0.42 * Math.sin(a)]; })],
+  'lingkaran': [Array.from({ length: 41 }, (_, i) => { const a = -Math.PI / 2 - 2 * Math.PI * (i / 40); return [0.5 + 0.33 * Math.cos(a), 0.5 + 0.33 * Math.sin(a)]; })],
+  'persegi': [
+    [[0.22, 0.22], [0.78, 0.22]],
+    [[0.78, 0.22], [0.78, 0.78]],
+    [[0.78, 0.78], [0.22, 0.78]],
+    [[0.22, 0.78], [0.22, 0.22]]
+  ],
+  'segitiga': [
+    [[0.50, 0.16], [0.18, 0.80]],
+    [[0.18, 0.80], [0.82, 0.80]],
+    [[0.82, 0.80], [0.50, 0.16]]
+  ]
 };
 function traceShapeQ(names) {
   const nm = pick(names);
@@ -471,14 +480,14 @@ const GENS = {
   },
   tka: {
     baca:    [(t) => syllableHearQ(t), (t) => letterCaseQ(t === 1 ? 1 : 2), (t) => wordPicQ(['apple', 'ball', 'banana', 'cat', 'dog', 'fish', 'sun', 'moon', 'star', 'heart', 'book', 'bird'])],
-    tulis:   [(t) => traceTextQ(t === 1 ? 'ILTHEFAUO'.split('') : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), 1), (t) => traceTextQ(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], 1), (t) => traceShapeQ(['persegi', 'segitiga', 'lingkaran', 'garis zigzag'])],
+    tulis:   [(t) => traceTextQ(t === 1 ? 'ILTHEFAUO'.split('') : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), 1), (t) => traceTextQ(['1', '2', '3', '4', '5', '6', '7', '8', '9'], 1), (t) => traceShapeQ(['persegi', 'segitiga', 'lingkaran', 'garis zigzag'])],
     logika:  [(t) => patternQ(1, 'tka'), (t) => oddShapeQ(t), (t) => sizeQ(), (t) => sameQ()],
     mat:     [(t) => countQ(t === 1 ? 5 : 10), (t) => addObjsQ(t === 1 ? 5 : 7), (t) => moreQ(8, false), (t) => findNumQ(10), (t) => nextNumQ(9, false)],
     inggris: [(t) => hearPicQ(['apple', 'banana', 'orange', 'cat', 'dog', 'fish', 'bird']), (t) => picEnWordQ(['apple', 'banana', 'cat', 'dog', 'fish', 'bird', 'sun', 'moon']), (t) => colorHearQ(t === 1 ? 2 : 3)]
   },
   tkb: {
     baca:    [(t) => wordPicQ(EASY_PIC), (t) => picWordQ(EASY_PIC), (t) => missingLetterQ(EASY_PIC), (t) => sentencePicQ(EASY_PIC)],
-    tulis:   [(t) => traceTextQ('abcdefghijklmnopqrstuvwxyz'.split(''), 1), (t) => traceTextQ(WORDS_TK, 1), (t) => traceTextQ('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), 1), (t) => traceTextQ(['10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'], 1)],
+    tulis:   [(t) => traceTextQ('abcdefghijklmnopqrstuvwxyz'.split(''), 1), (t) => traceTextQ('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), 1), (t) => traceTextQ(['1', '2', '3', '4', '5', '6', '7', '8', '9'], 1)],
     logika:  [(t) => patternQ(t === 1 ? 2 : 3, 'tkb'), (t) => categoryOddQ(), (t) => oddShapeQ(2), (t) => numPatternQ(t, 'tkb')],
     mat:     [(t) => countQ(t === 1 ? 10 : 20), (t) => addObjsQ(t === 1 ? 7 : 10), (t) => subObjsQ(t === 1 ? 6 : 10), (t) => nextNumQ(19, Math.random() < 0.4), (t) => bigSmallNumQ(20)],
     inggris: [(t) => hearPicQ(ALL_PIC), (t) => picEnWordQ(ALL_PIC), (t) => enNumberQ(10), (t) => enGreetQ()],
@@ -487,7 +496,7 @@ const GENS = {
   },
   sd12: {
     baca:    [() => readSentenceQ(), () => picWordQ(ALL_PIC.filter((k) => OBJ[k].id.length >= 4)), () => missingLetterQ(ALL_PIC)],
-    tulis:   [(t) => traceTextQ(['apel', 'bola', 'ikan', 'buku', 'bunga', 'pohon', 'bulan', 'hati', 'rumah', 'balon'], 1), (t) => tilesWordQ('sd12', t, 'id'), (t) => traceTextQ(['Budi', 'Ani', 'Siti', 'Dedi', 'Rina'], 1)],
+    tulis:   [(t) => traceTextQ('abcdefghijklmnopqrstuvwxyz'.split(''), 1), (t) => tilesWordQ('sd12', t, 'id'), (t) => traceTextQ('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''), 1)],
     logika:  [(t) => numPatternQ(t, 'sd12'), (t) => deductionQ(3), (t) => analogyQ(), (t) => patternQ(3, 'sd12'), (t) => categoryOddQ()],
     mat:     [(t) => addSubQ(t === 1 ? 20 : t === 2 ? 50 : 100, true), (t) => placeValueQ(t === 1 ? 49 : 99), (t) => compareNumsQ(t === 1 ? 50 : 99), (t) => skipCountQ(), (t) => addSubQ(t === 1 ? 20 : 100, false)],
     inggris: [() => enSpellQ(), () => enNumberWordQ(20), () => enDayQ(), () => enThisIsQ(), (t) => tilesWordQ('sd12', 1, 'en')],

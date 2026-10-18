@@ -30,8 +30,30 @@ function topbar(o) {
 }
 function bubble(text, id) { return `<div class="bubble" ${id ? `id="${id}"` : ''}>${text}</div>`; }
 
+let ABACUS_CTL = null;
+
+function screenAbacusLearn(initialStep = 0) {
+  if (SES && SES.ctl) SES.ctl.destroy();
+  if (SES && SES.timer) clearTimeout(SES.timer);
+  SES = null;
+  if (ABACUS_CTL && ABACUS_CTL.destroy) ABACUS_CTL.destroy();
+  A.stop();
+  A.setVoice('bintang');
+  app().className = 'abacus-learn';
+  ABACUS_CTL = mountAbacusLearn(app(), initialStep, () => {
+    if (ABACUS_CTL && ABACUS_CTL.destroy) ABACUS_CTL.destroy();
+    ABACUS_CTL = null;
+    A.stop();
+    screenHome();
+  });
+}
+
 /* ---------- Layar depan ---------- */
 function screenHome() {
+  if (ABACUS_CTL && ABACUS_CTL.destroy) {
+    ABACUS_CTL.destroy();
+    ABACUS_CTL = null;
+  }
   A.setVoice('awan');
   app().className = 'home';
   app().innerHTML = `${topbar({})}
@@ -39,7 +61,10 @@ function screenHome() {
     <h1 class="logo">Kawan Belajar</h1>
     <div class="cast"><div class="bob b1">${charSVG('awan', 'normal', 150)}</div><div class="bob b2">${charSVG('bintang', 'happy', 170)}</div><div class="bob b3">${charSVG('bulan', 'normal', 150)}</div></div>
     ${bubble('Halo! Ayo kita belajar sambil bermain.')}
-    <button class="btn big go" data-act="goLevels">Main</button>
+    <div class="home-btns">
+      <button class="btn big go" data-act="goLevels">Main</button>
+      <button class="btn big abacus-btn" data-act="goAbacusLearn">${icon('abacus', 38)} Belajar Sempoa</button>
+    </div>
     <div class="row"><button class="btn alt" data-act="goBadges">Lencana</button></div>
     <p class="note" id="audio-note" hidden></p>
   </main>`;
@@ -254,6 +279,7 @@ function burst(n) {
 const ACT = {
   goHome: () => { A.stop(); screenHome(); },
   goLevels: () => { A.ac(); screenLevels(); },
+  goAbacusLearn: () => { A.ac(); A.stop(); screenAbacusLearn(); },
   goSubjects: () => screenSubjects(),
   goBadges: () => screenBadges(),
   pickLevel: (el) => { S.level = el.dataset.id; save(); A.sfx('tap'); screenSubjects(); },
@@ -268,8 +294,28 @@ document.addEventListener('click', (e) => {
   if (el && ACT[el.dataset.act]) { A.sfx('tap'); ACT[el.dataset.act](el, e); }
 });
 
-window.addEventListener('DOMContentLoaded', () => {
-  A.setSound(S.sound);
-  screenHome();
-  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) { /* tempat untuk mode luring di masa depan */ }
-});
+function boot() {
+  try {
+    A.setSound(S.sound);
+  } catch (e) {
+    console.warn('Audio setup error:', e);
+  }
+  try {
+    screenHome();
+  } catch (e) {
+    console.error('Boot render error:', e);
+    const root = document.getElementById('app');
+    if (root && !root.innerHTML) {
+      root.innerHTML = '<main class="center" style="padding:2rem;text-align:center;"><h1>Kawan Belajar</h1><button class="btn big go" onclick="location.reload()">Buka Aplikasi</button></main>';
+    }
+  }
+  try {
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) { /* tempat untuk mode luring di masa depan */ }
+  } catch (e) {}
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  boot();
+}

@@ -194,3 +194,162 @@ const SPELLING = [
   ['izin', 'ijin'], ['objek', 'obyek'], ['jadwal', 'jadual'], ['silakan', 'silahkan'], ['hakikat', 'hakekat']
 ];
 const WORDS_TK = ['ibu', 'ayah', 'bola', 'mata', 'roti', 'buku', 'bulan', 'kaki', 'topi', 'sapi'];
+
+/* ===== Panduan Belajar Sempoa Dasar (Mengenal Manik & Angka 1-9) ===== */
+const ABACUS_TUTORIAL_STEPS = [
+  {
+    id: 0,
+    tag: 'Rumah Sempoa',
+    title: 'Mengenal Sempoa & Angka 0',
+    target: 0,
+    targetState: { up: 0, low: 0 },
+    bubble: 'Halo! Ini sempoa satuan. Manik yang menempel di garis tengah adalah nilainya. Jika semua menjauh, nilainya 0!',
+    say: 'Halo! Ini sempoa satuan. Manik yang menempel di garis tengah adalah nilainya. Jika semua menjauh, nilainya nol!',
+    finger: 'index',
+    dir: 'up',
+    fingerLabel: 'Perhatikan garis tengah',
+    guideBead: null,
+    guideText: 'Sempoa bersih = semua manik menjauhi garis tengah (nilai 0).'
+  },
+  {
+    id: 1,
+    tag: 'Angka 1',
+    title: 'Membuat Angka 1',
+    target: 1,
+    targetState: { up: 0, low: 1 },
+    bubble: 'Tiap manik bawah bernilai 1. Dorong 1 manik bawah ke atas memakai jempol!',
+    say: 'Tiap manik bawah bernilai satu. Dorong satu manik bawah ke atas memakai jempol!',
+    finger: 'thumb',
+    dir: 'up',
+    fingerLabel: 'Jempol naikkan 1 manik',
+    guideBead: 'b1',
+    guideText: 'Sentuh manik bawah pertama dan dorong ke garis tengah.'
+  },
+  {
+    id: 2,
+    tag: 'Angka 2',
+    title: 'Membuat Angka 2',
+    target: 2,
+    targetState: { up: 0, low: 2 },
+    bubble: 'Dorong 2 manik bawah ke atas dengan jempol. 1 ditambah 1 jadi 2!',
+    say: 'Dorong dua manik bawah ke atas dengan jempol. Satu ditambah satu jadi dua!',
+    finger: 'thumb',
+    dir: 'up',
+    fingerLabel: 'Jempol naikkan 2 manik',
+    guideBead: 'b2',
+    guideText: 'Naikkan manik ke-2 mendekati garis tengah.'
+  },
+  {
+    id: 3,
+    tag: 'Angka 3',
+    title: 'Membuat Angka 3',
+    target: 3,
+    targetState: { up: 0, low: 3 },
+    bubble: 'Dorong 3 manik bawah ke atas dengan jempol. Sekarang bernilai 3!',
+    say: 'Dorong tiga manik bawah ke atas dengan jempol. Sekarang bernilai tiga!',
+    finger: 'thumb',
+    dir: 'up',
+    fingerLabel: 'Jempol naikkan 3 manik',
+    guideBead: 'b3',
+    guideText: 'Naikkan manik ke-3 ke garis tengah.'
+  },
+  {
+    id: 4,
+    tag: 'Angka 4',
+    title: 'Membuat Angka 4',
+    target: 4,
+    targetState: { up: 0, low: 4 },
+    bubble: 'Dorong 4 manik bawah ke atas dengan jempol. Semua manik bawah menempel di garis tengah!',
+    say: 'Dorong empat manik bawah ke atas dengan jempol. Semua manik bawah bernilai empat!',
+    finger: 'thumb',
+    dir: 'up',
+    fingerLabel: 'Jempol naikkan 4 manik',
+    guideBead: 'b4',
+    guideText: 'Naikkan semua 4 manik bawah.'
+  },
+  {
+    id: 5,
+    tag: 'Angka 5',
+    title: 'Manik Atas Istimewa (5)',
+    target: 5,
+    targetState: { up: 1, low: 0 },
+    bubble: 'Manik atas sangat istimewa, nilainya 5! Turunkan manik atas ke garis tengah memakai jari telunjuk!',
+    say: 'Manik atas sangat istimewa, nilainya lima! Turunkan manik atas memakai jari telunjuk!',
+    finger: 'index',
+    dir: 'down',
+    fingerLabel: 'Telunjuk turunkan manik atas',
+    guideBead: 'u',
+    guideText: 'Turunkan manik atas (5) dan bersihkan manik bawah.'
+  },
+  {
+    id: 6,
+    tag: 'Angka 6',
+    title: 'Membuat Angka 6 (5 + 1)',
+    target: 6,
+    targetState: { up: 1, low: 1 },
+    bubble: 'Angka 6 adalah 5 ditambah 1! Turunkan manik atas 5 dan naikkan 1 manik bawah bersamaan!',
+    say: 'Angka enam adalah lima ditambah satu. Turunkan manik lima dan naikkan satu manik bawah!',
+    finger: 'pinch',
+    dir: 'pinch',
+    fingerLabel: 'Jepit 5 dan 1 ke tengah',
+    guideBead: 'b1',
+    guideText: 'Gabungkan manik atas (5) dan 1 manik bawah (1).'
+  },
+  {
+    id: 7,
+    tag: 'Angka 7',
+    title: 'Membuat Angka 7 (5 + 2)',
+    target: 7,
+    targetState: { up: 1, low: 2 },
+    bubble: 'Angka 7 adalah 5 ditambah 2! Manik atas 5 bersama 2 manik bawah di garis tengah.',
+    say: 'Angka tujuh adalah lima ditambah dua. Gabungkan manik atas lima dan dua manik bawah!',
+    finger: 'pinch',
+    dir: 'pinch',
+    fingerLabel: 'Jepit 5 dan 2 ke tengah',
+    guideBead: 'b2',
+    guideText: 'Gabungkan manik atas (5) dan 2 manik bawah (2).'
+  },
+  {
+    id: 8,
+    tag: 'Angka 8',
+    title: 'Membuat Angka 8 (5 + 3)',
+    target: 8,
+    targetState: { up: 1, low: 3 },
+    bubble: 'Angka 8 adalah 5 ditambah 3! Manik atas 5 bersama 3 manik bawah di garis tengah.',
+    say: 'Angka delapan adalah lima ditambah tiga. Manik atas lima bersama tiga manik bawah!',
+    finger: 'pinch',
+    dir: 'pinch',
+    fingerLabel: 'Jepit 5 dan 3 ke tengah',
+    guideBead: 'b3',
+    guideText: 'Gabungkan manik atas (5) dan 3 manik bawah (3).'
+  },
+  {
+    id: 9,
+    tag: 'Angka 9',
+    title: 'Membuat Angka 9 (Maksimal)',
+    target: 9,
+    targetState: { up: 1, low: 4 },
+    bubble: 'Angka 9 adalah 5 ditambah 4! Semua manik merapat ke garis tengah. Ini nilai tertinggi tiang satuan!',
+    say: 'Angka sembilan adalah lima ditambah empat. Semua manik merapat ke garis tengah!',
+    finger: 'pinch',
+    dir: 'pinch',
+    fingerLabel: 'Semua manik merapat',
+    guideBead: 'b4',
+    guideText: 'Manik atas 5 dan semua 4 manik bawah merapat.'
+  },
+  {
+    id: 10,
+    tag: 'Tantangan',
+    title: 'Tantangan Sempoa Ceria',
+    target: -1,
+    targetState: null,
+    bubble: 'Hebat! Sekarang coba buat angka tantangan di sempoa satuanmu!',
+    say: 'Hebat! Sekarang coba buat angka tantangan di sempoa satuanmu!',
+    finger: 'thumb',
+    dir: 'up',
+    fingerLabel: 'Bermain bebas',
+    guideBead: null,
+    guideText: 'Geser manik sesukamu atau selesaikan misi angka.'
+  }
+];
+

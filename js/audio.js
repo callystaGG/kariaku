@@ -96,14 +96,19 @@ const A = {
   },
   tryClip(p, token) {
     return new Promise((resolve) => {
-      const a = new Audio(clipFile(p, A.voice));
-      A.current = a;
-      let done = false;
-      const end = (ok) => { if (done) return; done = true; if (ok) A.played++; else A.missing++; resolve(ok); };
-      a.onended = () => end(true);
-      a.onerror = () => end(false);
-      a.play().catch(() => end(false));
-      setTimeout(() => { if (!done && token !== A.token) end(false); }, 20000);
+      try {
+        if (typeof Audio === 'undefined') return resolve(false);
+        const a = new Audio(clipFile(p, A.voice));
+        A.current = a;
+        let done = false;
+        const end = (ok) => { if (done) return; done = true; if (ok) A.played++; else A.missing++; resolve(ok); };
+        a.onended = () => end(true);
+        a.onerror = () => end(false);
+        a.play().catch(() => end(false));
+        setTimeout(() => { if (!done && token !== A.token) end(false); }, 20000);
+      } catch (e) {
+        resolve(false);
+      }
     });
   },
   /* Ucapkan urutan potongan suara. parts: array string (Indonesia) atau {l:'en',t:'...'} */
@@ -125,11 +130,16 @@ const A = {
   /* Cek apakah file suara tersedia (untuk pesan di layar depan) */
   check() {
     return new Promise((resolve) => {
-      const a = new Audio(clipFile(PHRASES.welcome, DEFAULT_VOICE));
-      a.onerror = () => resolve(false);
-      a.oncanplaythrough = () => resolve(true);
-      a.preload = 'auto';
-      setTimeout(() => resolve(false), 2500);
+      try {
+        if (typeof Audio === 'undefined') return resolve(false);
+        const a = new Audio(clipFile(PHRASES.welcome, DEFAULT_VOICE));
+        a.onerror = () => resolve(false);
+        a.oncanplaythrough = () => resolve(true);
+        a.preload = 'auto';
+        setTimeout(() => resolve(false), 2500);
+      } catch (e) {
+        resolve(false);
+      }
     });
   },
 

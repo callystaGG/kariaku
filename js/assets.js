@@ -152,3 +152,71 @@ function bead(cx, cy, on, color, r, b, interactive) {
   return `<g class="bead"${attrs}><ellipse cx="${cx}" cy="${cy}" rx="${Math.min(30, 36)}" ry="13" fill="${on ? color : '#FFF8D6'}" stroke="#4A3B6B" stroke-width="3"/>${interactive ? `<ellipse cx="${cx}" cy="${cy}" rx="34" ry="16" fill="transparent"/>` : ''}</g>`;
 }
 function abacusStatic(value, rods) { return `<div class="abacus-wrap">${abacusSVG(abacusState(value, rods), false)}</div>`; }
+
+/* Hand guide and single-rod Soroban for beginner abacus learning */
+function guideHandSVG(type = 'thumb', dir = 'up', px = 54) {
+  let inner = '';
+  if (type === 'thumb') {
+    inner = `<g class="hand-anim ${dir === 'up' ? 'bounce-up' : 'bounce-down'}">
+      <path d="M22 46 c-4 0 -8 -4 -8 -8 v-12 c0 -4 4 -8 8 -8 h6 v-10 c0 -4 3 -6 6 -6 s6 3 6 7 v9 h6 c4 0 7 3 7 7 v14 c0 4 -3 7 -7 7 z" fill="#FFD2A8" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M26 26 h14 M26 32 h14 M26 38 h12" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>
+      <path d="${dir === 'up' ? 'M32 7 v-5 M26 5 l6 -5 l6 5' : 'M32 47 v6 M26 50 l6 5 l6 -5'}" fill="none" stroke="#FF5A8D" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>`;
+  } else if (type === 'index') {
+    inner = `<g class="hand-anim ${dir === 'down' ? 'bounce-down' : 'bounce-up'}">
+      <path d="M28 8 c0 -4 3 -7 7 -7 s7 3 7 7 v18 h6 c4 0 7 3 7 7 v12 c0 5 -4 9 -9 9 h-14 c-5 0 -9 -4 -9 -9 v-14 c0 -3 2 -6 5 -7 v-16 z" fill="#FFD2A8" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M30 32 h16 M30 38 h14" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>
+      <path d="${dir === 'down' ? 'M35 48 v6 M29 51 l6 5 l6 -5' : 'M35 8 v-6 M29 5 l6 -5 l6 5'}" fill="none" stroke="#5BB5FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>`;
+  } else {
+    inner = `<g class="hand-anim pinch-anim">
+      <path d="M18 18 c0 -3 3 -6 6 -6 h12 c4 0 6 3 6 6 v6 c0 4 -3 6 -6 6 h-10 v4 h12 c4 0 6 3 6 6 v6 c0 4 -3 6 -6 6 h-14 c-4 0 -6 -3 -6 -6 z" fill="#FFD2A8" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M46 18 l-6 6 M46 42 l-6 -6" fill="none" stroke="#FF5A8D" stroke-width="3.5" stroke-linecap="round"/>
+    </g>`;
+  }
+  return `<svg class="hand-guide" viewBox="0 0 64 64" width="${px}" height="${px}" role="img" aria-label="Panduan Jari">${inner}</svg>`;
+}
+
+function abacusLearnRodSVG(st, opts = {}) {
+  const W = 280, H = 340, bar = 120, cx = 140;
+  const guideBead = opts.guideBead || null;
+  const interactive = opts.interactive !== false;
+  
+  let s = `<svg class="abacus-single${interactive ? ' live' : ''}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Sempoa Satuan">`;
+  s += `<rect x="36" y="8" width="${W - 72}" height="${H - 24}" rx="22" fill="#FF8F8F" stroke="${INK}" stroke-width="4"/>`;
+  s += `<rect x="50" y="22" width="${W - 100}" height="${H - 52}" rx="14" fill="#FFF6EE" stroke="${INK}" stroke-width="3"/>`;
+  s += `<rect x="${cx - 5}" y="22" width="10" height="${H - 52}" rx="3" fill="#B07A4A"/>`;
+  s += `<rect x="50" y="${bar - 6}" width="${W - 100}" height="12" fill="${INK}" rx="3"/>`;
+  s += `<circle cx="${cx}" cy="${bar}" r="3" fill="#FFF8D6"/>`;
+  
+  const upOn = !!st.up;
+  const upY = upOn ? (bar - 6 - 20) : 52;
+  const isUpGuide = guideBead === 'u';
+  const upHighlight = isUpGuide ? ' highlight-bead' : '';
+  s += `<g class="bead big-bead${upHighlight}" ${interactive ? 'data-b="u"' : ''}>
+    <ellipse cx="${cx}" cy="${upY}" rx="46" ry="19" fill="${upOn ? '#FFD95A' : '#FFF9DE'}" stroke="${INK}" stroke-width="3.5"/>
+    <text x="${cx}" y="${upY + 5}" text-anchor="middle" font-family="Fredoka,Nunito,sans-serif" font-weight="700" font-size="14" fill="${INK}" pointer-events="none">5</text>
+    ${interactive ? `<ellipse cx="${cx}" cy="${upY}" rx="50" ry="24" fill="transparent"/>` : ''}
+  </g>`;
+
+  for (let b = 1; b <= 4; b++) {
+    const on = b <= st.low;
+    const yActive = (bar + 6 + 20) + (b - 1) * 33;
+    const yInactive = (H - 42 - 18) - (4 - b) * 33;
+    const y = on ? yActive : yInactive;
+    const isThisGuide = guideBead === ('b' + b);
+    const lowHighlight = isThisGuide ? ' highlight-bead' : '';
+    s += `<g class="bead big-bead${lowHighlight}" ${interactive ? `data-b="${b}"` : ''}>
+      <ellipse cx="${cx}" cy="${y}" rx="46" ry="18" fill="${on ? '#5BB5FF' : '#E8F5FF'}" stroke="${INK}" stroke-width="3.5"/>
+      <text x="${cx}" y="${y + 5}" text-anchor="middle" font-family="Fredoka,Nunito,sans-serif" font-weight="700" font-size="13" fill="${INK}" pointer-events="none">1</text>
+      ${interactive ? `<ellipse cx="${cx}" cy="${y}" rx="50" ry="22" fill="transparent"/>` : ''}
+    </g>`;
+  }
+
+  s += `<text x="${cx}" y="${H - 6}" text-anchor="middle" font-family="Fredoka,Nunito,sans-serif" font-weight="700" font-size="14" fill="${INK}">Tiang Satuan</text>`;
+  s += `<text x="30" y="${bar + 4}" text-anchor="end" font-family="Fredoka,sans-serif" font-weight="600" font-size="11" fill="#7C6D9E">Garis Nilai</text>`;
+  s += `<path d="M32 ${bar} h16" stroke="#7C6D9E" stroke-width="2" stroke-dasharray="3 3"/>`;
+
+  s += '</svg>';
+  return s;
+}
