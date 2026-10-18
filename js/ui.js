@@ -113,6 +113,9 @@ Q.types.tiles = function (q, host, ctx) {
 
 /* ---------- Menjiplak huruf, angka, kata, dan bentuk ---------- */
 const TRACE_FONT = (px) => `700 ${px}px "Fredoka","Baloo 2","Arial Rounded MT Bold","Trebuchet MS",Arial,sans-serif`;
+/* Garis panduan menulis seperti buku tulis: garis atas, garis tengah putus-putus, dan garis dasar yang lebih tebal.
+   Posisinya dihitung dari ukuran huruf sebenarnya (tinggi huruf besar dan huruf kecil), hanya untuk huruf, angka, dan kata. */
+const TRACE_GUIDE = { top: '#7FA6E8', mid: '#F2799F', base: '#5B86D6' };
 Q.types.trace = function (q, host, ctx) {
   const isWord = q.mode === 'text' && q.text.length > 2;
   host.innerHTML = `<div class="trace-wrap"><canvas aria-label="Kertas menulis"></canvas></div>
@@ -127,13 +130,31 @@ Q.types.trace = function (q, host, ctx) {
   const mask = mk(), ink = mk(), wide = mk();
   const g = cv.getContext('2d'), mg = mask.getContext('2d'), ig = ink.getContext('2d'), wg = wide.getContext('2d');
   const brush = (isWord ? cssH * 0.1 : cssH * 0.07) * dpr;
-  let fontPx = 0;
+  let fontPx = 0, guide = null;
+  const computeGuide = () => {
+    guide = null;
+    if (q.mode !== 'text') return;
+    g.font = TRACE_FONT(fontPx); g.textBaseline = 'middle';
+    const y = H / 2 + fontPx * 0.04, cap = g.measureText('H'), xh = g.measureText('x');
+    if (cap.actualBoundingBoxAscent !== undefined) guide = { top: y - cap.actualBoundingBoxAscent, mid: y - xh.actualBoundingBoxAscent, base: y + cap.actualBoundingBoxDescent };
+    else guide = { top: y - fontPx * 0.36, mid: y - fontPx * 0.1, base: y + fontPx * 0.36 }; /* cadangan untuk peramban lama */
+  };
+  const drawGuide = () => {
+    if (!guide) return;
+    const x0 = W * 0.04, x1 = W * 0.96, line = (y) => { const yy = Math.round(y) + 0.5; g.beginPath(); g.moveTo(x0, yy); g.lineTo(x1, yy); g.stroke(); };
+    g.save(); g.lineCap = 'butt';
+    g.lineWidth = 2.5 * dpr; g.strokeStyle = TRACE_GUIDE.top; line(guide.top);
+    g.setLineDash([12 * dpr, 10 * dpr]); g.strokeStyle = TRACE_GUIDE.mid; line(guide.mid); g.setLineDash([]);
+    g.lineWidth = 5 * dpr; g.strokeStyle = TRACE_GUIDE.base; line(guide.base);
+    g.restore();
+  };
   const layoutFont = () => {
     if (q.mode !== 'text') return;
     fontPx = isWord ? cssH * 0.62 : cssH * 0.8; fontPx *= dpr;
     g.font = TRACE_FONT(fontPx); const wpx = g.measureText(q.text).width;
     if (wpx > W * 0.9) fontPx *= (W * 0.9) / wpx;
     if (q.text.length === 1 && q.text === q.text.toLowerCase() && /[a-z]/.test(q.text)) fontPx *= 0.95;
+    computeGuide();
   };
   layoutFont();
   const poly = (ctx2, pts) => { pts.forEach((p, i) => { const x = p[0] * W, y = p[1] * H; if (i) ctx2.lineTo(x, y); else { ctx2.beginPath(); ctx2.moveTo(x, y); } }); };
@@ -157,6 +178,7 @@ Q.types.trace = function (q, host, ctx) {
     g.lineCap = 'round'; g.lineJoin = 'round';
     if (q.mode === 'text') {
       g.fillStyle = '#EFE9FF'; drawTextShape(g, 'fill');
+      drawGuide();
       g.setLineDash([10 * dpr, 9 * dpr]); g.lineWidth = 3 * dpr; g.strokeStyle = INK; drawTextShape(g, 'stroke'); g.setLineDash([]);
     } else {
       g.strokeStyle = '#EFE9FF'; g.lineWidth = W * 0.1; q.pts.forEach((pl) => { poly(g, pl); g.stroke(); });
