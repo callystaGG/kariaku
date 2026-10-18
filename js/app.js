@@ -48,6 +48,162 @@ function screenAbacusLearn(initialStep = 0) {
   });
 }
 
+/* ===== Progressive Web App (PWA) & Instalasi Android ===== */
+let deferredInstallPrompt = null;
+let isAppInstalled = (typeof window !== 'undefined' && (
+  window.matchMedia('(display-mode: standalone)').matches ||
+  window.navigator.standalone === true
+)) || false;
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    updateInstallUI();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    isAppInstalled = true;
+    deferredInstallPrompt = null;
+    updateInstallUI();
+  });
+}
+
+function renderInstallBtn() {
+  if (isAppInstalled) {
+    return `<button class="install-btn installed" aria-label="Aplikasi Sudah Terpasang di Perangkat">${icon('android', 26)} <span>Terpasang ✓</span></button>`;
+  }
+  return `<button class="install-btn" data-act="promptInstall" aria-label="Pasang Aplikasi ke Perangkat Android">${icon('android', 26)} <span>Pasang di HP</span></button>`;
+}
+
+function updateInstallUI() {
+  const btn = document.querySelector('.install-btn');
+  if (btn) {
+    if (isAppInstalled) {
+      btn.className = 'install-btn installed';
+      btn.innerHTML = `${icon('android', 26)} <span>Terpasang ✓</span>`;
+      btn.removeAttribute('data-act');
+    } else {
+      btn.className = 'install-btn';
+      btn.innerHTML = `${icon('android', 26)} <span>Pasang di HP</span>`;
+      btn.setAttribute('data-act', 'promptInstall');
+    }
+  }
+}
+
+function showInstallModal() {
+  const isIOS = typeof navigator !== 'undefined' && /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+  const existing = document.getElementById('pwa-install-modal');
+  if (existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'pwa-install-modal';
+  modal.className = 'pwa-modal-overlay';
+  modal.innerHTML = `
+    <div class="pwa-modal" role="dialog" aria-modal="true" aria-labelledby="pwa-title">
+      <div class="pwa-modal-head">
+        <h2 class="pwa-modal-title" id="pwa-title">${icon('android', 32)} Pasang Aplikasi</h2>
+        <button class="round sm" id="pwa-close-btn" aria-label="Tutup">✕</button>
+      </div>
+      <div class="pwa-modal-body">
+        <p style="margin:0; font-size:1.05rem; line-height:1.4;">
+          Pasang <b>Kawan Belajar</b> di layar HP atau Tablet Android Anda agar bisa dimainkan langsung satu ketukan dan tetap aktif saat offline!
+        </p>
+        ${deferredInstallPrompt ? `
+          <button class="btn go" id="pwa-direct-install-btn" style="font-size:1.25rem; display:flex; align-items:center; justify-content:center; gap:0.6rem; width:100%; padding:0.65rem 1rem;">
+            ${icon('install', 28)} Pasang Sekarang
+          </button>
+          <div style="font-size:0.88rem; opacity:0.8; margin:-0.2rem 0 0.2rem;">atau pasang secara manual:</div>
+        ` : ''}
+        ${isIOS ? `
+          <div class="pwa-steps">
+            <div class="pwa-step-item">
+              <span class="pwa-step-num">1</span>
+              <div>Buka tautan game ini di browser <b>Safari</b>.</div>
+            </div>
+            <div class="pwa-step-item">
+              <span class="pwa-step-num">2</span>
+              <div>Tekan tombol <b>Bagikan (Share)</b> di bilah bawah Safari (ikon kotak dengan panah ke atas).</div>
+            </div>
+            <div class="pwa-step-item">
+              <span class="pwa-step-num">3</span>
+              <div>Gulir ke bawah dan pilih <b>Tambahkan ke Layar Utama</b> (<i>Add to Home Screen</i>).</div>
+            </div>
+          </div>
+        ` : `
+          <div class="pwa-steps">
+            <div class="pwa-step-item">
+              <span class="pwa-step-num">1</span>
+              <div>Buka di browser <b>Google Chrome</b> di perangkat Android Anda.</div>
+            </div>
+            <div class="pwa-step-item">
+              <span class="pwa-step-num">2</span>
+              <div>Tekan tombol menu <b>titik tiga (⋮)</b> di pojok kanan atas browser.</div>
+            </div>
+            <div class="pwa-step-item">
+              <span class="pwa-step-num">3</span>
+              <div>Pilih menu <b>"Instal aplikasi"</b> atau <b>"Tambahkan ke Layar Utama"</b> (<i>Add to Home screen</i>).</div>
+            </div>
+            <div class="pwa-step-item">
+              <span class="pwa-step-num">4</span>
+              <div>Tekan <b>Instal</b>. Ikon Kawan Belajar akan otomatis terpasang di menu utama HP!</div>
+            </div>
+          </div>
+        `}
+      </div>
+      <button class="btn alt" id="pwa-close-btn-bottom" style="font-size:1.15rem; width:100%;">Tutup</button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  const close = () => { modal.remove(); };
+  const c1 = modal.querySelector('#pwa-close-btn');
+  const c2 = modal.querySelector('#pwa-close-btn-bottom');
+  if (c1) c1.onclick = close;
+  if (c2) c2.onclick = close;
+  modal.onclick = (e) => { if (e.target === modal) close(); };
+
+  const directBtn = modal.querySelector('#pwa-direct-install-btn');
+  if (directBtn && deferredInstallPrompt) {
+    directBtn.onclick = async () => {
+      close();
+      try {
+        await deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        if (choice && choice.outcome === 'accepted') {
+          isAppInstalled = true;
+          deferredInstallPrompt = null;
+          updateInstallUI();
+        }
+      } catch (err) {
+        console.warn('Install error:', err);
+      }
+    };
+  }
+}
+
+function initConnectivity() {
+  if (typeof window === 'undefined') return;
+  const updateStatus = () => {
+    const existing = document.getElementById('offline-banner');
+    if (!navigator.onLine) {
+      if (!existing) {
+        const ban = document.createElement('div');
+        ban.id = 'offline-banner';
+        ban.className = 'offline-banner';
+        ban.innerHTML = `<span class="offline-dot"></span> Mode Offline: Tetap bisa belajar tanpa kuota!`;
+        document.body.appendChild(ban);
+      }
+    } else if (existing) {
+      existing.remove();
+    }
+  };
+  window.addEventListener('online', updateStatus);
+  window.addEventListener('offline', updateStatus);
+  updateStatus();
+}
+
 /* ---------- Layar depan ---------- */
 function screenHome() {
   if (ABACUS_CTL && ABACUS_CTL.destroy) {
@@ -65,7 +221,10 @@ function screenHome() {
       <button class="btn big go" data-act="goLevels">Main</button>
       <button class="btn big abacus-btn" data-act="goAbacusLearn">${icon('abacus', 38)} Belajar Sempoa</button>
     </div>
-    <div class="row"><button class="btn alt" data-act="goBadges">Lencana</button></div>
+    <div class="row">
+      <button class="btn alt" data-act="goBadges">Lencana</button>
+      ${renderInstallBtn()}
+    </div>
     <p class="note" id="audio-note" hidden></p>
   </main>`;
   A.detect().then((ok) => {
@@ -287,7 +446,25 @@ const ACT = {
   again: (el) => startSession(el.dataset.s),
   exitSession: () => { if (SES && SES.ctl) SES.ctl.destroy(); clearTimeout(SES && SES.timer); SES = null; A.stop(); screenSubjects(); },
   speak: () => { if (SES && SES.cur && SES.cur.say) A.say(SES.cur.say); },
-  toggleSound: () => { S.sound = !S.sound; A.setSound(S.sound); save(); const r = $('[data-act="toggleSound"]'); $$('[data-act="toggleSound"]').forEach((b) => { b.innerHTML = icon(S.sound ? 'sound' : 'soundoff', 26); }); }
+  toggleSound: () => { S.sound = !S.sound; A.setSound(S.sound); save(); const r = $('[data-act="toggleSound"]'); $$('[data-act="toggleSound"]').forEach((b) => { b.innerHTML = icon(S.sound ? 'sound' : 'soundoff', 26); }); },
+  promptInstall: async () => {
+    if (isAppInstalled) return;
+    if (deferredInstallPrompt) {
+      try {
+        await deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        if (choice && choice.outcome === 'accepted') {
+          isAppInstalled = true;
+          deferredInstallPrompt = null;
+          updateInstallUI();
+          return;
+        }
+      } catch (err) {
+        console.warn('Install prompt error:', err);
+      }
+    }
+    showInstallModal();
+  }
 };
 document.addEventListener('click', (e) => {
   const el = e.target.closest('[data-act]');
@@ -310,7 +487,14 @@ function boot() {
     }
   }
   try {
-    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) { /* tempat untuk mode luring di masa depan */ }
+    initConnectivity();
+  } catch (e) {}
+  try {
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '0.0.0.0' || location.hostname === '127.0.0.1')) {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .then((reg) => console.log('Service Worker registered:', reg.scope))
+        .catch((err) => console.warn('Service Worker registration failed:', err));
+    }
   } catch (e) {}
 }
 

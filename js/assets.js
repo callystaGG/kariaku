@@ -38,7 +38,9 @@ const ICONS = {
   back: '<path d="M44 32H18M30 18L16 32l14 14" fill="none" stroke-width="6"/>',
   home: '<polygon points="8,32 32,10 56,32" fill="#FF8F8F"/><rect x="14" y="30" width="36" height="24" fill="#FFD0A0"/><rect x="27" y="40" width="10" height="14" fill="#B07A4A"/>',
   medal: '<polygon points="18,6 30,6 34,26 22,26" fill="#FF8FB8"/><polygon points="46,6 34,6 30,26 42,26" fill="#7CC8FF"/><circle cx="32" cy="40" r="16" fill="#FFD95A"/><polygon transform="translate(32,40) scale(0.45)" points="' + STAR_PTS + '" fill="#fff"/>',
-  lock: '<rect x="14" y="28" width="36" height="28" rx="6" fill="#C9C2DA"/><path d="M22 28v-8a10 10 0 0 1 20 0v8" fill="none"/>'
+  lock: '<rect x="14" y="28" width="36" height="28" rx="6" fill="#C9C2DA"/><path d="M22 28v-8a10 10 0 0 1 20 0v8" fill="none"/>',
+  install: '<path d="M12 42v6a4 4 0 0 0 4 4h32a4 4 0 0 0 4-4v-6M32 10v30M18 28l14 14 14-14" fill="none" stroke-width="6"/>',
+  android: '<path d="M20 18L14 8M44 18L50 8" fill="none" stroke-width="4"/><path d="M14 26a18 18 0 0 1 36 0z" fill="#6FD08C"/><circle cx="23" cy="22" r="2.5" fill="#fff" stroke="none"/><circle cx="41" cy="22" r="2.5" fill="#fff" stroke="none"/><rect x="14" y="30" width="36" height="22" rx="4" fill="#6FD08C"/><rect x="6" y="30" width="6" height="16" rx="3" fill="#6FD08C"/><rect x="52" y="30" width="6" height="16" rx="3" fill="#6FD08C"/><rect x="22" y="52" width="6" height="8" rx="3" fill="#6FD08C"/><rect x="36" y="52" width="6" height="8" rx="3" fill="#6FD08C"/>'
 };
 
 function icon(name, px = 48, cls = '') {
