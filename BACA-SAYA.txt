@@ -1,0 +1,48 @@
+KAWAN BELAJAR
+Game belajar untuk anak usia 2 sampai 12 tahun (KB, TK A, TK B, SD 1-2, SD 3-4, SD 5-6)
+Karakter: Awan (kucing awan), Bintang (kelinci bintang), Bulan (beruang bulan). Semuanya karakter orisinal.
+
+ISI GAME
+- 7 pelajaran: Membaca, Menulis, Logika, Matematika, Bahasa Inggris, Hitung Cepat, Sempoa
+- Isi menyesuaikan jenjang. KB dan TK A punya 5 pelajaran (belum ada Hitung Cepat dan Sempoa).
+  TK B sampai SD 5-6 punya semua 7 pelajaran. Sempoa di TK B hanya perkenalan 1 batang.
+- Tingkat kesulitan naik atau turun sendiri mengikuti jawaban anak (3 tingkat per jenjang).
+- Soal yang salah akan diulang di sesi yang sama dan di sesi berikutnya.
+- Hadiah bintang, lencana, dan hari beruntun. Progres tersimpan di perangkat.
+- Tidak ada hukuman: jawaban salah diberi kesempatan kedua, lalu jawabannya ditunjukkan dengan lembut.
+
+CARA MAIN (TANPA SUARA)
+Buka file index.html di Chrome, Edge, atau Safari. Game langsung jalan.
+
+AGAR SUARANYA NATURAL SEPERTI MANUSIA (SATU KALI SAJA)
+Game ini TIDAK memakai suara robot bawaan browser. Suara dimainkan dari rekaman di folder "audio".
+Rekaman dibuat sekali memakai suara saraf (neural) yang natural:
+  Indonesia : id-ID-GadisNeural
+  Inggris   : en-US-JennyNeural
+Langkah di Windows:
+  1. Pasang Python dari python.org (centang "Add Python to PATH").
+  2. Pastikan komputer tersambung internet.
+  3. Klik dua kali  tools\buat_suara.bat
+  4. Tunggu sampai selesai (sekitar 1.600 potongan suara, beberapa menit). Folder "audio" akan terisi.
+Di Mac atau Linux: jalankan  sh tools/buat_suara.sh
+Jika ada yang gagal karena internet putus, jalankan lagi. Yang sudah jadi akan dilewati.
+Ingin suara lain? Buka tools/buat_suara.py dan ubah VOICE_ID atau VOICE_EN.
+Anda juga boleh merekam suara sendiri atau suara orang tua: ganti file mp3 di folder "audio"
+dengan nama file yang sama (daftar kalimat dan nama filenya ada di tools/manifest.json).
+
+BERMAIN DI TABLET ATAU HP
+Cara paling mudah: di komputer, buka terminal di folder ini lalu jalankan
+    python -m http.server 8000
+Di tablet (satu Wi-Fi), buka  http://ALAMAT-IP-KOMPUTER:8000  lalu pilih "Tambahkan ke layar utama".
+Atau unggah seluruh folder ini ke layanan hosting statis milik Anda sendiri (hanya untuk keluarga).
+
+MENAMBAH ATAU MENGUBAH SOAL
+- Bank kalimat dan bacaan: js/content.js
+- Pembuat soal per jenjang dan pelajaran: js/gen.js (bagian GENS di bagian bawah)
+- Setelah mengubah teks yang diucapkan, jalankan:  node tools/check.js --manifest
+  lalu jalankan lagi tools/buat_suara.bat untuk membuat rekaman kalimat yang baru.
+- Pemeriksa otomatis: node tools/check.js  (memeriksa puluhan ribu soal acak)
+
+CATATAN
+- Font Fredoka dan Nunito (lisensi SIL OFL) sudah disertakan di folder "fonts".
+- Game ini hanya memakai karakter orisinal buatan sendiri, jadi aman dibagikan.
