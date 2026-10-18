@@ -1,5 +1,10 @@
 # Membuat suara tiap karakter dengan VoiceStudio
 
+**Sementara:** sebelum rekaman dibuat, game memakai suara sistem perangkat (speechSynthesis). Awan, Bintang, dan Bulan
+dibedakan lewat nada, tempo, dan suara pria/wanita jika perangkat punya keduanya (profil ada di `SYSTEM_VOICES` dalam
+`js/audio.js`). Di Edge, suara Indonesia "Natural" (Gadis dan Ardi) jauh lebih bagus daripada di Chrome. Rekaman, bila ada,
+selalu diutamakan, jadi membuatnya nanti tidak perlu mengubah apa pun.
+
 Awan, Bintang, dan Bulan masing-masing punya suara sendiri. Rekaman dibuat sekali di komputer Anda, disimpan di
 `audio/awan/`, `audio/bintang/`, dan `audio/bulan/`, lalu game dimainkan tanpa internet.
 
@@ -84,7 +89,7 @@ skrip pembuat suara lagi (hanya klip yang baru yang dibuat):
 
 ## Pengujian
 
-    node --test tools/test/suara.test.js        jalur klip dan manifes per karakter
+    node --test tools/test/suara.test.js tools/test/suara_sistem.test.js    jalur klip, manifes, dan suara sistem
     python tools/test/test_buat_suara.py         skrip pembuat suara (server VoiceStudio tiruan)
     python tools/uji_browser.py                  memainkan semua jenjang x pelajaran (butuh: pip install playwright)
     python tools/uji_suara_lengkap.py            sama, dengan klip hening untuk tiap rekaman: memastikan setiap

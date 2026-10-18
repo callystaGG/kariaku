@@ -11,11 +11,15 @@ ISI GAME
 - Hadiah bintang, lencana, dan hari beruntun. Progres tersimpan di perangkat.
 - Tidak ada hukuman: jawaban salah diberi kesempatan kedua, lalu jawabannya ditunjukkan dengan lembut.
 
-CARA MAIN (TANPA SUARA)
+CARA MAIN
 Buka file index.html di Chrome, Edge, atau Safari. Game langsung jalan.
+Selama rekaman belum dibuat, game memakai suara sistem perangkat (suara bawaan Windows/Chrome/Edge, tanpa internet).
+Awan, Bintang, dan Bulan dibedakan lewat nada, tempo, dan suara pria/wanita jika perangkat punya keduanya.
+Suara sistem tiap perangkat berbeda-beda, jadi hasilnya bisa terdengar kurang natural. Untuk suara yang lebih baik, lihat bagian berikut.
+Tips: di Edge, suara bahasa Indonesia "Natural" (Gadis dan Ardi) biasanya jauh lebih bagus daripada di Chrome.
 
 AGAR TIAP KARAKTER PUNYA SUARA SENDIRI (SATU KALI SAJA)
-Game ini TIDAK memakai suara robot bawaan browser. Suara dimainkan dari rekaman di folder "audio".
+Rekaman di folder "audio" selalu diutamakan. Jika sebuah rekaman ada, itu yang diputar; jika tidak, game memakai suara sistem.
 Awan, Bintang, dan Bulan masing-masing punya folder suara sendiri: audio/awan, audio/bintang, audio/bulan.
 Rekaman dibuat sekali dengan VoiceStudio yang berjalan di komputer Anda (suara bisa dirancang dari deskripsi teks).
 Langkah lengkapnya ada di  tools/SUARA.md. Ringkasnya:

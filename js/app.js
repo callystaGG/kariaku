@@ -41,9 +41,15 @@ function screenHome() {
     ${bubble('Halo! Ayo kita belajar sambil bermain.')}
     <button class="btn big go" data-act="goLevels">Main</button>
     <div class="row"><button class="btn alt" data-act="goBadges">Lencana</button></div>
-    <p class="note" id="audio-note" hidden>Suara natural belum terpasang. Jalankan skrip pembuat suara satu kali (lihat BACA-SAYA.txt) agar karakter bisa berbicara.</p>
+    <p class="note" id="audio-note" hidden></p>
   </main>`;
-  A.check().then((ok) => { const n = $('#audio-note'); if (n) n.hidden = ok; });
+  A.detect().then((ok) => {
+    const n = $('#audio-note'); if (!n) return;
+    n.hidden = ok;
+    n.textContent = A.systemOK()
+      ? 'Sementara memakai suara sistem perangkat. Untuk suara tiap karakter yang lebih natural, buat rekaman satu kali (lihat BACA-SAYA.txt).'
+      : 'Suara belum terpasang dan perangkat ini tidak punya suara sistem. Buat rekaman satu kali (lihat BACA-SAYA.txt) agar karakter bisa berbicara.';
+  });
 }
 
 /* ---------- Pilih kelas ---------- */
